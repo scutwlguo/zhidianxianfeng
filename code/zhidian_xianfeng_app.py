@@ -2280,10 +2280,10 @@ def render_chat_panel(house_key: str, selected_date, max_available_date) -> None
         unsafe_allow_html=True,
     )
     quick_questions = [
-        ("今日", "今天用电情况怎么样？"),
-        ("设备", "今天哪些设备最耗电？"),
-        ("风险", "有没有异常运行或高风险时段？"),
-        ("节能", "请给我几条节能建议。"),
+        ("今日用电情况", "今天用电情况怎么样？"),
+        ("耗电设备分析", "最近几天哪些设备最耗电？"),
+        ("能耗风险分析", "有没有异常运行或高风险时段？"),
+        ("用电节能分析", "请给我几条节能建议。"),
     ]
     quick_cols = st.columns(2)
     for idx, (label, question) in enumerate(quick_questions):
