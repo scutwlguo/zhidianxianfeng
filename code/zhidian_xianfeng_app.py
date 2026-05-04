@@ -1600,7 +1600,9 @@ def apply_global_theme() -> None:
         div[data-testid="stChatInput"] button {
             position: absolute !important;
             right: 10px !important;
-            bottom: 10px !important;
+            top: 50% !important;
+            bottom: auto !important;
+            transform: translateY(-50%) !important;
             width: 36px !important;
             min-width: 36px !important;
             height: 36px !important;
