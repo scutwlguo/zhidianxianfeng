@@ -217,13 +217,44 @@ def normalize_date_list(date_list: Optional[List[str]]) -> List[str]:
     return sorted(set(out))
 
 
-def detect_intent(query: str, previous_intent: Optional[str] = None) -> Literal["behavior_analysis", "data_qa"]:
+def is_guidance_query(query: str) -> bool:
+    q = re.sub(r"[\s\u3000]+", "", (query or "").strip().lower())
+    if not q:
+        return True
+
+    guidance_keywords = [
+        "你好", "您好", "hi", "hello", "在吗", "你是谁", "你能做什么", "有什么功能",
+        "怎么用", "如何使用", "帮助", "help", "可以问什么", "能问什么", "提问示例",
+    ]
+    data_keywords = [
+        "用电", "电量", "电费", "设备", "功率", "耗能", "节能", "异常", "风险",
+        "趋势", "分析", "建议", "多少", "最大", "最小", "几点", "多久", "最近",
+    ]
+    return any(k in q for k in guidance_keywords) and not any(k in q for k in data_keywords)
+
+
+def build_guidance_answer() -> str:
+    return (
+        "您好，我是智能用电助手，可以帮您快速理解家庭用电情况。\n\n"
+        "您可以这样问：\n"
+        "- 今天哪些设备最耗电？\n"
+        "- 最近一周用电趋势怎么样？\n"
+        "- 有没有异常运行或高风险时段？\n"
+        "- 空调、热水器有什么节能建议？\n"
+        "- 总电量和预估电费是多少？"
+    )
+
+
+def detect_intent(query: str, previous_intent: Optional[str] = None) -> Literal["assistant_guidance", "behavior_analysis", "data_qa"]:
     """
     粗粒度意图识别：
     - 行为分析 / 节能建议 / 报告 => behavior_analysis
     - 其他查数值、查事实 => data_qa
     """
     q = query.strip()
+    if is_guidance_query(q):
+        return "assistant_guidance"
+
     behavior_keywords = [
         "分析", "行为", "习惯", "节能", "建议", "报告", "高耗能", "异常运行",
         "画像", "优化", "结论", "能耗洞察", "帮我看看", "用电情况"
@@ -383,23 +414,29 @@ def build_behavior_system_prompt(prompt_text: str) -> str:
     return (
         f"{prompt_text}\n\n"
         "补充要求：\n"
-        "1. 必须严格基于结构化 JSON 中的数据、证据与提示字段回答。\n"
+        "1. 必须严格基于当前家庭用户的用电记录、证据与提示字段回答。\n"
         "2. 如用户后续追问某个设备或某条结论，请结合本轮数据继续解释。\n"
         "3. 若用户问题与节能建议相关，优先引用 strong_signals、risk_hints、suggestion_directions。\n"
-        "4. 若证据不足，不要编造；请明确说明依据不足。"
+        "4. 若证据不足，不要编造；请明确说明依据不足。\n"
+        "5. 输出必须简短：总长度控制在 260 字以内，最多 5 条要点。\n"
+        "6. 不要输出 Markdown 表格、JSON、代码块、长标题或英文变量名。\n"
+        "7. 不要提及 REDD、数据集、JSON、结构化字段等技术或实验来源。"
     )
 
 
 def build_qa_system_prompt() -> str:
     return (
         "你是一名家庭用电数据问答助手。\n"
-        "请严格根据给定的结构化 JSON 回答用户问题，不要编造数据。\n"
+        "请严格根据当前家庭用户的用电记录回答用户问题，不要编造数据。\n"
         "规则：\n"
-        "1. 先看用户当前问题，再从 JSON 中定位答案。\n"
+        "1. 先看用户当前问题，再从当前记录中定位答案。\n"
         "2. 若问题只问某个事实（如最大耗电设备、总电量、开启次数），请直接给简洁答案。\n"
         "3. 若问题需要解释原因，可结合 appliance_evidence、risk_hints 做简要解释。\n"
-        "4. 若会话中存在上文追问，请在不脱离当前 JSON 的前提下承接上下文。\n"
-        "5. 若 JSON 中没有答案，请明确说明没有足够数据。"
+        "4. 若会话中存在上文追问，请在不脱离当前记录的前提下承接上下文。\n"
+        "5. 若当前记录中没有答案，请明确说明没有足够数据。\n"
+        "6. 输出必须简短：总长度控制在 220 字以内，最多 4 条要点。\n"
+        "7. 不要输出 Markdown 表格、JSON、代码块、长标题或英文变量名。\n"
+        "8. 不要提及 REDD、数据集、JSON、结构化字段等技术或实验来源。"
     )
 
 
@@ -408,7 +445,7 @@ def make_chain(llm):
         [
             ("system", "{system_prompt}"),
             MessagesPlaceholder(variable_name="history"),
-            ("human", "【结构化数据JSON】\n{data_context}\n\n【用户问题】\n{user_query}"),
+            ("human", "【当前用电记录】\n{data_context}\n\n【用户问题】\n{user_query}"),
         ]
     )
     chain = prompt | llm
@@ -428,6 +465,10 @@ def answer_with_model(
     data_context: Dict,
     user_query: str,
 ) -> str:
+    history = get_session_history(session_id)
+    if len(history.messages) > 8:
+        history.messages = history.messages[-8:]
+
     chain = make_chain(llm)
     result = chain.invoke(
         {
@@ -440,6 +481,30 @@ def answer_with_model(
     return result.content if hasattr(result, "content") else str(result)
 
 
+def clean_model_answer(text: str, max_chars: int = 420) -> str:
+    s = (text or "").strip()
+    s = re.sub(r"```.*?```", "", s, flags=re.S)
+    lines = []
+    for raw in s.splitlines():
+        line = raw.strip()
+        if not line:
+            if lines and lines[-1] != "":
+                lines.append("")
+            continue
+        if line.startswith("|") and line.endswith("|"):
+            continue
+        if any(term in line for term in ["REDD", "数据集", "JSON", "结构化字段"]):
+            line = line.replace("REDD", "").replace("数据集", "用电记录")
+            line = line.replace("JSON", "记录").replace("结构化字段", "记录")
+        lines.append(line)
+
+    compact = "\n".join(lines).strip()
+    compact = re.sub(r"\n{3,}", "\n\n", compact)
+    if len(compact) > max_chars:
+        compact = compact[:max_chars].rstrip("，。；、,. ") + "。"
+    return compact or "当前信息不足，请换个问题或指定日期后再试。"
+
+
 class ChatRequest(BaseModel):
     session_id: str = Field(..., description="会话ID，多轮对话依赖它")
     message: str = Field(..., description="用户自然语言问题")
@@ -447,10 +512,11 @@ class ChatRequest(BaseModel):
     house_dir: str = Field(default=DEFAULT_HOUSE_DIR, description="默认 REDD_House6_stats")
     start_date: str = Field(default="2026-04-16", description="多天分析起始日期 YYYY-MM-DD")
     end_date: str = Field(default="2026-04-22", description="多天分析结束日期 YYYY-MM-DD")
+    pack_mode: str = Field(default="auto", description="auto / single-day / multi-day-range")
     platform: str = Field(default=DEFAULT_PLATFORM, description="兼容字段（实际固定 aliyun）")
     model_name: str = Field(default=DEFAULT_MODEL_NAME, description="兼容字段（实际固定 qwen3.6-plus）")
     temperature: float = Field(default=0.2, description="推荐低温度，保证分析稳定")
-    max_tokens: int = Field(default=2048, description="最大输出 token")
+    max_tokens: int = Field(default=800, description="最大输出 token")
 
 
 class ChatResponse(BaseModel):
@@ -489,6 +555,20 @@ def chat(req: ChatRequest):
     fixed_platform = DEFAULT_PLATFORM
     fixed_model_name = DEFAULT_MODEL_NAME
 
+    resolved_target = dict(target)
+    resolved_target["platform"] = fixed_platform
+    resolved_target["model_name"] = fixed_model_name
+
+    if intent == "assistant_guidance":
+        state["last_intent"] = None
+        resolved_target["pack_type"] = "no-data"
+        return ChatResponse(
+            session_id=req.session_id,
+            intent=intent,
+            resolved_target=resolved_target,
+            answer=build_guidance_answer(),
+        )
+
     if fixed_platform == "aliyun" and not os.getenv("DASHSCOPE_API_KEY"):
         raise HTTPException(
             status_code=400,
@@ -507,17 +587,23 @@ def chat(req: ChatRequest):
             detail=f"模型初始化失败，请检查配置（platform={fixed_platform}, model={fixed_model_name}）。",
         )
 
-    resolved_target = dict(target)
-    resolved_target["platform"] = fixed_platform
-    resolved_target["model_name"] = fixed_model_name
     try:
-        package, behavior_prompt = load_multi_day_package_range(
-            dataset=target["dataset"],
-            house_dir=target["house_dir"],
-            start_date=start_date,
-            end_date=end_date,
-        )
-        resolved_target["pack_type"] = "multi-day-range"
+        pack_mode = (req.pack_mode or "auto").strip().lower()
+        if pack_mode == "single-day" or start_date == end_date:
+            package, behavior_prompt = load_single_day_package(
+                dataset=target["dataset"],
+                house_dir=target["house_dir"],
+                date_str=start_date,
+            )
+            resolved_target["pack_type"] = "single-day"
+        else:
+            package, behavior_prompt = load_multi_day_package_range(
+                dataset=target["dataset"],
+                house_dir=target["house_dir"],
+                start_date=start_date,
+                end_date=end_date,
+            )
+            resolved_target["pack_type"] = "multi-day-range"
         resolved_target["start_date"] = start_date
         resolved_target["end_date"] = end_date
     except Exception as e:
@@ -531,13 +617,14 @@ def chat(req: ChatRequest):
         # 普通问答也建议给 package，而不是只给 raw daily_record，这样模型能直接用 evidence
         data_context = package
 
-    answer = answer_with_model(
+    raw_answer = answer_with_model(
         llm=llm,
         session_id=req.session_id,
         system_prompt=system_prompt,
         data_context=data_context,
         user_query=req.message,
     )
+    answer = clean_model_answer(raw_answer, max_chars=420 if intent == "behavior_analysis" else 340)
 
     state["last_intent"] = intent
 

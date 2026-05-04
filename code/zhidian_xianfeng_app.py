@@ -219,16 +219,59 @@ def _extract_dates_from_text_for_api(text: str) -> List[str]:
     return sorted(set(out))
 
 
-def _resolve_api_date_window(question: str, max_date) -> Tuple[str, str]:
+def _is_guidance_query(text: str) -> bool:
+    q = _normalize_question(text)
+    if not q:
+        return True
+
+    guidance_phrases = [
+        "你好", "您好", "hi", "hello", "在吗", "你是谁", "你能做什么", "有什么功能",
+        "怎么用", "如何使用", "帮助", "help", "可以问什么", "能问什么", "提问示例",
+    ]
+    data_phrases = [
+        "用电", "电量", "电费", "设备", "空调", "热水器", "洗衣机", "烘干机", "电饭煲",
+        "冰箱", "照明", "功率", "耗能", "节能", "异常", "风险", "趋势", "分析", "建议",
+        "多少", "最大", "最小", "几点", "多久", "最近", "今天", "昨天",
+    ]
+    return any(p in q for p in guidance_phrases) and not any(p in q for p in data_phrases)
+
+
+def _build_guidance_response() -> str:
+    return (
+        "您好，我是智能用电助手，可以帮您快速理解家庭用电情况。\n\n"
+        "您可以这样问：\n"
+        "- 今天哪些设备最耗电？\n"
+        "- 最近一周用电趋势怎么样？\n"
+        "- 有没有异常运行或高风险时段？\n"
+        "- 空调、热水器这类设备有什么节能建议？\n"
+        "- 总电量和预估电费是多少？"
+    )
+
+
+def _query_prefers_multi_day(question: str) -> bool:
+    q = _normalize_question(question)
+    multi_day_keywords = [
+        "最近", "近一周", "一周", "7天", "七天", "这几天", "多天", "本周", "上周",
+        "趋势", "变化", "对比", "总览", "整体", "累计", "平均", "波动",
+    ]
+    return any(k in q for k in multi_day_keywords)
+
+
+def _resolve_api_date_window(question: str, selected_date, max_date) -> Tuple[str, str, str]:
     dates = _extract_dates_from_text_for_api(question)
     if dates:
         if len(dates) == 1:
-            return dates[0], dates[0]
-        return min(dates), max(dates)
+            return dates[0], dates[0], "single-day"
+        return min(dates), max(dates), "multi-day-range"
 
-    end_dt = pd.to_datetime(max_date).normalize()
-    start_dt = end_dt - pd.Timedelta(days=6)
-    return start_dt.strftime("%Y-%m-%d"), end_dt.strftime("%Y-%m-%d")
+    if _query_prefers_multi_day(question):
+        end_dt = pd.to_datetime(max_date).normalize()
+        start_dt = end_dt - pd.Timedelta(days=6)
+        return start_dt.strftime("%Y-%m-%d"), end_dt.strftime("%Y-%m-%d"), "multi-day-range"
+
+    day_dt = pd.to_datetime(selected_date or max_date).normalize()
+    day = day_dt.strftime("%Y-%m-%d")
+    return day, day, "single-day"
 
 
 def _house_dir_for_api_from_house_key(house_key: str) -> str:
@@ -246,6 +289,7 @@ def _call_energy_chat_local_direct(
     house_key: str,
     start_date: str,
     end_date: str,
+    pack_mode: str,
     session_id: str,
 ) -> Optional[str]:
     """本地直调 energy_chat_api.chat（无需单独启动 uvicorn）。"""
@@ -265,10 +309,11 @@ def _call_energy_chat_local_direct(
             house_dir=_house_dir_for_api_from_house_key(house_key),
             start_date=start_date,
             end_date=end_date,
+            pack_mode=pack_mode,
             platform=FIXED_PLATFORM,
             model_name=FIXED_MODEL_NAME,
             temperature=0.2,
-            max_tokens=2048,
+            max_tokens=800,
         )
         resp = chat_fn(req_obj)
 
@@ -285,10 +330,14 @@ def _call_energy_chat_local_direct(
 def call_energy_chat_api(
     user_query: str,
     house_key: str,
+    selected_date,
     max_available_date,
     session_id: str,
 ) -> str:
-    start_date, end_date = _resolve_api_date_window(user_query, max_available_date)
+    if _is_guidance_query(user_query):
+        return _build_guidance_response()
+
+    start_date, end_date, pack_mode = _resolve_api_date_window(user_query, selected_date, max_available_date)
     payload = {
         "session_id": session_id,
         "message": user_query,
@@ -296,11 +345,24 @@ def call_energy_chat_api(
         "house_dir": _house_dir_for_api_from_house_key(house_key),
         "start_date": start_date,
         "end_date": end_date,
+        "pack_mode": pack_mode,
         "platform": FIXED_PLATFORM,
         "model_name": FIXED_MODEL_NAME,
         "temperature": 0.2,
-        "max_tokens": 2048,
+        "max_tokens": 800,
     }
+
+    if "127.0.0.1" in ENERGY_CHAT_API_URL or "localhost" in ENERGY_CHAT_API_URL:
+        local_answer = _call_energy_chat_local_direct(
+            user_query=user_query,
+            house_key=house_key,
+            start_date=start_date,
+            end_date=end_date,
+            pack_mode=pack_mode,
+            session_id=session_id,
+        )
+        if local_answer:
+            return local_answer
 
     req = urllib.request.Request(
         url=ENERGY_CHAT_API_URL,
@@ -331,6 +393,7 @@ def call_energy_chat_api(
             house_key=house_key,
             start_date=start_date,
             end_date=end_date,
+            pack_mode=pack_mode,
             session_id=session_id,
         )
         if local_answer:
@@ -348,6 +411,7 @@ def call_energy_chat_api(
             house_key=house_key,
             start_date=start_date,
             end_date=end_date,
+            pack_mode=pack_mode,
             session_id=session_id,
         )
         if local_answer:
@@ -357,9 +421,21 @@ def call_energy_chat_api(
 
 def beautify_assistant_text(text: str) -> str:
     s = (text or "").strip()
+    s = re.sub(r"```.*?```", "", s, flags=re.S)
     # 保持“1、2、3”原样，避免被 Markdown 有序列表自动续号导致编号错乱。
+    kept_lines = []
+    for raw in s.splitlines():
+        line = raw.strip()
+        if line.startswith("|") and line.endswith("|"):
+            continue
+        line = line.replace("REDD", "").replace("数据集", "用电记录")
+        line = line.replace("JSON", "记录").replace("结构化字段", "记录")
+        kept_lines.append(line)
+    s = "\n".join(kept_lines)
     s = re.sub(r"(?m)^\s*[-•]\s*", "- ", s)
     s = re.sub(r"\n{3,}", "\n\n", s)
+    if len(s) > 460:
+        s = s[:460].rstrip("，。；、,. ") + "。"
     return s
 
 
@@ -2134,7 +2210,7 @@ def render_alert_panel(alert_df: pd.DataFrame) -> None:
             unsafe_allow_html=True,
         )
 
-def render_chat_panel(house_key: str, max_available_date) -> None:
+def render_chat_panel(house_key: str, selected_date, max_available_date) -> None:
     title_l, title_r = st.columns([3.1, 1.45])
     with title_l:
         section_title("智能用电助手")
@@ -2256,6 +2332,7 @@ def render_chat_panel(house_key: str, max_available_date) -> None:
                                 answer = call_energy_chat_api(
                                     user_query=prompt,
                                     house_key=house_key,
+                                    selected_date=selected_date,
                                     max_available_date=max_available_date,
                                     session_id=session_id,
                                 )
@@ -2491,7 +2568,11 @@ def main() -> None:
 
     with right_chat:
         with st.container(border=True, height=CHAT_PANEL_HEIGHT):
-            render_chat_panel(house_key=house_key, max_available_date=max_date)
+            render_chat_panel(
+                house_key=house_key,
+                selected_date=st.session_state.selected_day,
+                max_available_date=max_date,
+            )
 
     st.caption(
         f"当前用户：{house_info.display_name}｜ "
