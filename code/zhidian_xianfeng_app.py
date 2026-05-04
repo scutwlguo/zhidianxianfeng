@@ -284,6 +284,21 @@ def _house_dir_for_api_from_house_key(house_key: str) -> str:
     return f"REDD_House{no}_stats"
 
 
+def _format_date_chip(start_date, end_date=None) -> str:
+    try:
+        start_dt = pd.to_datetime(start_date)
+        if end_date is None:
+            return f"{start_dt.month}月{start_dt.day}日"
+        end_dt = pd.to_datetime(end_date)
+        if start_dt.date() == end_dt.date():
+            return f"{start_dt.month}月{start_dt.day}日"
+        if start_dt.year == end_dt.year:
+            return f"{start_dt.month}月{start_dt.day}日 - {end_dt.month}月{end_dt.day}日"
+        return f"{start_dt.strftime('%Y-%m-%d')} - {end_dt.strftime('%Y-%m-%d')}"
+    except Exception:
+        return str(start_date)
+
+
 def _call_energy_chat_local_direct(
     user_query: str,
     house_key: str,
@@ -988,10 +1003,11 @@ def render_house_kg_panel(user_name: str, dataset_name: str = "", house_key: str
             },
         })
         edges_list.append({
-            "from": user_id, "to": app_id, "label": "拥有",
+            "from": user_id, "to": app_id, "label": "",
             "color": {"color": "#8e9aaf", "highlight": "#b0bac9"},
             "width": 1.2, "arrows": "to",
             "font": {"color": "#9ca3af", "size": 11, "strokeWidth": 0},
+            "title": f"{user.get('name', '')} 拥有 {app_name}",
             "props": {
                 "类型": "关系",
                 "关系": "拥有",
@@ -1008,7 +1024,7 @@ def render_house_kg_panel(user_name: str, dataset_name: str = "", house_key: str
         wd = r.get("weekday_overlap") or ""
         we = r.get("weekend_overlap") or ""
         edges_list.append({
-            "from": s, "to": t, "label": "同时开启",
+            "from": s, "to": t, "label": "",
             "color": {"color": "#7a8599", "highlight": "#a0aab8"},
             "width": 1.4, "arrows": "to",
             "font": {"color": "#9ca3af", "size": 10, "strokeWidth": 0},
@@ -1113,7 +1129,8 @@ var options = {{
     }},
     edges: {{
         smooth: {{ type: 'continuous', roundness: 0.15 }},
-        arrows: {{ to: {{ scaleFactor: 0.6 }} }}
+        arrows: {{ to: {{ scaleFactor: 0.55 }} }},
+        font: {{ size: 10, color: '#b8c7dd', strokeWidth: 0 }}
     }},
     nodes: {{
         borderWidth: 2,
@@ -1127,6 +1144,17 @@ var options = {{
 }};
 
 var network = new vis.Network(container, data, options);
+
+network.on('hoverEdge', function(params) {{
+    var edgeInfo = propsMap[params.edge];
+    if (edgeInfo && edgeInfo.props && edgeInfo.props['关系']) {{
+        edges.update({{ id: params.edge, label: edgeInfo.props['关系'] }});
+    }}
+}});
+
+network.on('blurEdge', function(params) {{
+    edges.update({{ id: params.edge, label: '' }});
+}});
 
 // 点击节点弹出属性面板
 network.on('click', function(params) {{
@@ -1491,6 +1519,36 @@ def apply_global_theme() -> None:
             margin-bottom: 0 !important;
         }
 
+        .quick-question-wrap {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            margin: 8px 2px 8px;
+        }
+        .quick-question-label {
+            color: var(--text-2);
+            font-size: 12px;
+            white-space: nowrap;
+        }
+        .date-context-chip {
+            display: inline-flex;
+            align-items: center;
+            height: 26px;
+            padding: 0 10px;
+            border-radius: 999px;
+            border: 1px solid rgba(110, 168, 255, 0.18);
+            background: rgba(13, 29, 57, 0.76);
+            color: #a9c8f6;
+            font-size: 12px;
+            line-height: 1;
+            margin-top: -4px;
+            margin-bottom: 6px;
+        }
+        div[data-testid="stHorizontalBlock"] div[data-testid="column"] .stButton button {
+            white-space: nowrap;
+        }
+
         div[data-testid="stForm"] {
             border: none !important;
             background: transparent !important;
@@ -1693,6 +1751,20 @@ def apply_global_theme() -> None:
             cursor: pointer;
             user-select: none;
             font-size: 14px;
+        }
+        .user-status-pill {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 64px;
+            height: 28px;
+            padding: 0 10px;
+            border-radius: 999px;
+            border: 1px solid rgba(34, 197, 94, 0.28);
+            background: rgba(22, 163, 74, 0.12);
+            color: #8ff0b0;
+            font-size: 12px;
+            font-weight: 700;
         }
         </style>
         """,
@@ -2101,7 +2173,7 @@ def sidebar_settings() -> Tuple[Dict[str, List[Dict[str, str]]], Optional[str], 
             value=bool(st.session_state.get("enable_chat_api", False)),
             help="开启后：命中问答对仍走本地；未命中时调用后端 API。",
         )
-        st.caption(f"API 固定策略：dataset=REDD；house=用户1~6映射；模型={FIXED_PLATFORM}/{FIXED_MODEL_NAME}。")
+        st.caption("智能助手会根据当前登录用户自动匹配用电记录。")
 
         # 开关即时生效，不依赖“保存路径”按钮
         st.session_state.enable_chat_api = bool(enable_chat_api)
@@ -2139,7 +2211,6 @@ def sidebar_settings() -> Tuple[Dict[str, List[Dict[str, str]]], Optional[str], 
 
 def render_login_panel(dataset_name: str, house_key: str, datasets: Dict[str, List[Dict[str, str]]]) -> HouseInfo:
     house_info = get_house_info(dataset_name, house_key)
-    safe_house_id = re.sub(r"[^a-zA-Z0-9_-]", "_", house_info.house_id)
     st.markdown(f"""
     <div class="user-profile-card">
         <div class="user-avatar">{''.join([c for c in house_info.display_name if c])[0] if house_info.display_name else 'U'}</div>
@@ -2156,15 +2227,8 @@ def render_login_panel(dataset_name: str, house_key: str, datasets: Dict[str, Li
             <span class="user-info-value">{house_info.account}</span>
         </div>
         <div class="user-info-row">
-            <span class="user-info-label">密码</span>
-            <span class="user-info-value">
-                <span class="user-password-wrap">
-                    <input type="checkbox" id="pwd-toggle-{safe_house_id}" class="pwd-toggle-checkbox">
-                    <span class="user-password-mask">****</span>
-                    <span class="user-password-plain">{house_info.password}</span>
-                    <label for="pwd-toggle-{safe_house_id}" class="user-password-eye">👁</label>
-                </span>
-            </span>
+            <span class="user-info-label">账户状态</span>
+            <span class="user-info-value"><span class="user-status-pill">已认证</span></span>
         </div>
     </div>
     """, unsafe_allow_html=True)
@@ -2268,6 +2332,23 @@ def render_chat_panel(house_key: str, selected_date, max_available_date) -> None
                 st.write(message["content"])
     st.markdown("</div>", unsafe_allow_html=True)
 
+    quick_prompt = ""
+    st.markdown(
+        '<div class="quick-question-wrap"><span class="quick-question-label">快捷提问</span></div>',
+        unsafe_allow_html=True,
+    )
+    quick_questions = [
+        ("今日总结", "今天用电情况怎么样？"),
+        ("高耗能设备", "今天哪些设备最耗电？"),
+        ("异常风险", "有没有异常运行或高风险时段？"),
+        ("节能建议", "请给我几条节能建议。"),
+    ]
+    quick_cols = st.columns(2)
+    for idx, (label, question) in enumerate(quick_questions):
+        with quick_cols[idx % 2]:
+            if st.button(label, key=f"quick_question_{idx}", use_container_width=True):
+                quick_prompt = question
+
     with st.form("chat_input_form", clear_on_submit=True):
         user_prompt = st.text_area(
             "输入问题",
@@ -2303,8 +2384,10 @@ def render_chat_panel(house_key: str, selected_date, max_available_date) -> None
     </script>
     """, height=0)
 
-    if send_clicked:
-        prompt = user_prompt.strip()
+    prompt_to_send = quick_prompt or (user_prompt.strip() if send_clicked else "")
+
+    if prompt_to_send:
+        prompt = prompt_to_send.strip()
         if prompt:
             st.session_state.chat_messages.append({"role": "user", "content": prompt})
 
@@ -2459,6 +2542,11 @@ def main() -> None:
                 top_l, top_r = st.columns([3, 1])
                 with top_l:
                     section_title("用能总览")
+                    if st.session_state.date_range and len(st.session_state.date_range) == 2:
+                        st.markdown(
+                            f"<div class='date-context-chip'>当前范围：{_format_date_chip(st.session_state.date_range[0], st.session_state.date_range[1])}</div>",
+                            unsafe_allow_html=True,
+                        )
                 selected_range = st.session_state.date_range
                 with top_r:
                     with st.popover("📅", use_container_width=True):
@@ -2493,6 +2581,11 @@ def main() -> None:
                 title_l, title_r = st.columns([5, 1])
                 with title_l:
                     section_title("日用电量趋势")
+                    if st.session_state.date_range and len(st.session_state.date_range) == 2:
+                        st.markdown(
+                            f"<div class='date-context-chip'>趋势范围：{_format_date_chip(st.session_state.date_range[0], st.session_state.date_range[1])}</div>",
+                            unsafe_allow_html=True,
+                        )
                 selected_range = st.session_state.date_range
                 with title_r:
                     with st.popover("📅", use_container_width=True):
@@ -2534,6 +2627,10 @@ def main() -> None:
             c_title, c_picker = st.columns([3, 1])
             with c_title:
                 section_title("单日设备画像")
+                st.markdown(
+                    f"<div class='date-context-chip'>当前单日：{_format_date_chip(st.session_state.selected_day)}</div>",
+                    unsafe_allow_html=True,
+                )
             with c_picker:
                 with st.popover("📅", use_container_width=True):
                     chosen_day = st.date_input(
