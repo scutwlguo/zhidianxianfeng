@@ -236,6 +236,18 @@ def _is_guidance_query(text: str) -> bool:
     return any(p in q for p in guidance_phrases) and not any(p in q for p in data_phrases)
 
 
+def _is_lightweight_non_energy_query(text: str) -> bool:
+    q = _normalize_question(text)
+    if not q:
+        return True
+    energy_phrases = [
+        "用电", "电量", "电费", "设备", "空调", "热水器", "洗衣机", "烘干机", "电饭煲",
+        "冰箱", "照明", "功率", "耗能", "节能", "异常", "风险", "趋势", "分析", "建议",
+        "多少", "最大", "最小", "几点", "多久", "最近", "今天", "昨天",
+    ]
+    return len(q) <= 24 and not any(p in q for p in energy_phrases)
+
+
 def _build_guidance_response() -> str:
     return (
         "您好，我是智能用电助手，可以帮您快速理解家庭用电情况。\n\n"
@@ -299,6 +311,11 @@ def _format_date_chip(start_date, end_date=None) -> str:
         return str(start_date)
 
 
+@st.cache_resource(show_spinner=False)
+def _get_energy_chat_module():
+    return importlib.import_module("energy_chat_api")
+
+
 def _call_energy_chat_local_direct(
     user_query: str,
     house_key: str,
@@ -309,9 +326,7 @@ def _call_energy_chat_local_direct(
 ) -> Optional[str]:
     """本地直调 energy_chat_api.chat（无需单独启动 uvicorn）。"""
     try:
-        mod = importlib.import_module("energy_chat_api")
-        # 避免模块缓存导致配置更新后不生效（如切换阿里云变量名）
-        mod = importlib.reload(mod)
+        mod = _get_energy_chat_module()
         req_cls = getattr(mod, "ChatRequest", None)
         chat_fn = getattr(mod, "chat", None)
         if req_cls is None or chat_fn is None:
@@ -328,7 +343,7 @@ def _call_energy_chat_local_direct(
             platform=FIXED_PLATFORM,
             model_name=FIXED_MODEL_NAME,
             temperature=0.2,
-            max_tokens=800,
+            max_tokens=500,
         )
         resp = chat_fn(req_obj)
 
@@ -349,7 +364,7 @@ def call_energy_chat_api(
     max_available_date,
     session_id: str,
 ) -> str:
-    if _is_guidance_query(user_query):
+    if _is_guidance_query(user_query) or _is_lightweight_non_energy_query(user_query):
         return _build_guidance_response()
 
     start_date, end_date, pack_mode = _resolve_api_date_window(user_query, selected_date, max_available_date)
@@ -364,7 +379,7 @@ def call_energy_chat_api(
         "platform": FIXED_PLATFORM,
         "model_name": FIXED_MODEL_NAME,
         "temperature": 0.2,
-        "max_tokens": 800,
+        "max_tokens": 500,
     }
 
     if "127.0.0.1" in ENERGY_CHAT_API_URL or "localhost" in ENERGY_CHAT_API_URL:
@@ -525,7 +540,7 @@ def match_answer_from_qa(user_question: str) -> Optional[str]:
     return None
 
 
-def stream_text_chunks(text: str, chunk_size: int = 12, delay: float = 0.02):
+def stream_text_chunks(text: str, chunk_size: int = 18, delay: float = 0.006):
     content = text or ""
     for i in range(0, len(content), chunk_size):
         yield content[i:i + chunk_size]
@@ -2314,7 +2329,7 @@ def render_chat_panel(house_key: str, selected_date, max_available_date) -> None
                     with st.chat_message("assistant"):
                         thinking_holder = st.empty()
                         thinking_holder.markdown("<span style='color:#9cb1d9;'>思考中...</span>", unsafe_allow_html=True)
-                        time.sleep(5)
+                        time.sleep(0.2)
                         thinking_holder.empty()
             else:
                 if bool(st.session_state.get("enable_chat_api", False)):

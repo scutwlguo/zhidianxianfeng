@@ -15,6 +15,7 @@ import json
 import re
 import os
 import importlib.util
+from functools import lru_cache
 from datetime import datetime
 from pathlib import Path
 from typing import Dict, Optional, Tuple, Literal, List
@@ -58,6 +59,7 @@ DEFAULT_HOUSE_DIR = "REDD_House6_stats"
 # 运行期内存
 SESSION_HISTORIES: Dict[str, InMemoryChatMessageHistory] = {}
 SESSION_STATE: Dict[str, Dict] = {}
+LLM_CACHE: Dict[Tuple[str, str, float, int], object] = {}
 
 
 def _load_module(module_path: Path, module_name: str):
@@ -295,6 +297,7 @@ def resolve_target_from_query(
     }
 
 
+@lru_cache(maxsize=96)
 def load_single_day_package(dataset: str, house_dir: str, date_str: str) -> Tuple[Dict, str]:
     daily_json_root = resolve_daily_json_root()
     package, prompt_text = build_gpt_analysis_package(
@@ -307,6 +310,7 @@ def load_single_day_package(dataset: str, house_dir: str, date_str: str) -> Tupl
     return package, prompt_text
 
 
+@lru_cache(maxsize=48)
 def load_multi_day_package_range(dataset: str, house_dir: str, start_date: str, end_date: str) -> Tuple[Dict, str]:
     daily_json_root = resolve_daily_json_root()
     package, prompt_text = build_gpt_analysis_package(
@@ -481,6 +485,18 @@ def answer_with_model(
     return result.content if hasattr(result, "content") else str(result)
 
 
+def get_cached_llm(platform: str, model_name: str, temperature: float, max_tokens: int):
+    key = (platform, model_name, round(float(temperature), 3), int(max_tokens))
+    if key not in LLM_CACHE:
+        LLM_CACHE[key] = create_llm(
+            platform=platform,
+            model_name=model_name,
+            temperature=temperature,
+            max_tokens=max_tokens,
+        )
+    return LLM_CACHE[key]
+
+
 def clean_model_answer(text: str, max_chars: int = 420) -> str:
     s = (text or "").strip()
     s = re.sub(r"```.*?```", "", s, flags=re.S)
@@ -516,7 +532,7 @@ class ChatRequest(BaseModel):
     platform: str = Field(default=DEFAULT_PLATFORM, description="兼容字段（实际固定 aliyun）")
     model_name: str = Field(default=DEFAULT_MODEL_NAME, description="兼容字段（实际固定 qwen3.6-plus）")
     temperature: float = Field(default=0.2, description="推荐低温度，保证分析稳定")
-    max_tokens: int = Field(default=800, description="最大输出 token")
+    max_tokens: int = Field(default=500, description="最大输出 token")
 
 
 class ChatResponse(BaseModel):
@@ -575,7 +591,7 @@ def chat(req: ChatRequest):
             detail="缺少阿里云密钥：请配置环境变量 DASHSCOPE_API_KEY。",
         )
 
-    llm = create_llm(
+    llm = get_cached_llm(
         platform=fixed_platform,
         model_name=fixed_model_name,
         temperature=req.temperature,
