@@ -2329,7 +2329,7 @@ def render_chat_panel(house_key: str, selected_date, max_available_date) -> None
                     with st.chat_message("assistant"):
                         thinking_holder = st.empty()
                         thinking_holder.markdown("<span style='color:#9cb1d9;'>思考中...</span>", unsafe_allow_html=True)
-                        time.sleep(0.2)
+                        time.sleep(2.5)
                         thinking_holder.empty()
             else:
                 if bool(st.session_state.get("enable_chat_api", False)):
