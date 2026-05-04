@@ -17,7 +17,6 @@ import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
 import streamlit.components.v1 as components
-from model_config import FIXED_MODEL_NAME, FIXED_PLATFORM
 
 
 # ============================================================
@@ -29,6 +28,57 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="collapsed",
 )
+
+
+def _sync_streamlit_secrets_to_env() -> None:
+    """Let Streamlit Cloud Secrets feed the modules that read os.environ."""
+    try:
+        secrets = st.secrets
+    except Exception:
+        return
+
+    keys = (
+        "DASHSCOPE_API_KEY",
+        "OPENAI_API_KEY",
+        "DEEPSEEK_API_KEY",
+        "DMX_API_KEY",
+        "ALIYUN_BASE_URL",
+        "DMXAPI_URL",
+        "APP_LLM_PLATFORM",
+        "APP_LLM_MODEL_NAME",
+        "APP_ENERGY_CHAT_API_URL",
+        "APP_DATA_ROOT",
+        "APP_KG_ROOT",
+        "APP_DAILY_JSON_ROOT",
+    )
+    sections = ("api_keys", "llm", "app")
+
+    for key in keys:
+        value = None
+        try:
+            if key in secrets:
+                value = secrets[key]
+        except Exception:
+            value = None
+
+        if value is None:
+            for section in sections:
+                try:
+                    if section in secrets and key in secrets[section]:
+                        value = secrets[section][key]
+                        break
+                except Exception:
+                    continue
+
+        value_text = str(value).strip() if value is not None else ""
+        if value_text and not os.getenv(key):
+            os.environ[key] = value_text
+
+
+_sync_streamlit_secrets_to_env()
+
+from model_config import FIXED_MODEL_NAME, FIXED_PLATFORM
+
 
 PRICE_PER_KWH = 0.7
 SUPPORTED_DATASET_NAMES = ["REDD", "UK-DALE", "REFIT"]

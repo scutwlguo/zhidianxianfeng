@@ -29,7 +29,15 @@ APP_LLM_MODEL_NAME=qwen3.6-plus
 4. 在云环境中准备两类数据目录：
 	- 按日分析 Excel 根目录（例如：`/app/data/output/按日分析结果_全部`）
 	- 知识图谱导出目录（例如：`/app/data/output/kg_export`）
-5. 通过环境变量指定目录（推荐）：
+5. 在 App 的 `Settings` -> `Secrets` 中填写模型密钥和可选配置：
+
+```toml
+DASHSCOPE_API_KEY = "your-dashscope-api-key"
+APP_LLM_PLATFORM = "aliyun"
+APP_LLM_MODEL_NAME = "qwen3.6-plus"
+```
+
+6. 通过环境变量或 Streamlit Secrets 指定目录（推荐）：
 	- `APP_DATA_ROOT=/app/data/output/按日分析结果_全部`
 	- `APP_KG_ROOT=/app/data/output/kg_export`
 
