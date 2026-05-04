@@ -1579,6 +1579,9 @@ def apply_global_theme() -> None:
             background: transparent !important;
         }
         div[data-testid="stChatInput"] > div {
+            position: relative !important;
+            min-height: 74px !important;
+            padding: 8px 54px 8px 12px !important;
             background: linear-gradient(180deg, rgba(14, 22, 38, 0.92), rgba(8, 15, 29, 0.96)) !important;
             border: 1px solid rgba(110, 168, 255, 0.16) !important;
             border-radius: 18px !important;
@@ -1588,15 +1591,31 @@ def apply_global_theme() -> None:
             color: var(--text-1) !important;
             font-size: 14px !important;
             line-height: 1.55 !important;
+            min-height: 54px !important;
+            padding: 8px 4px 8px 0 !important;
         }
         div[data-testid="stChatInput"] textarea::placeholder {
             color: #8394b8 !important;
         }
         div[data-testid="stChatInput"] button {
+            position: absolute !important;
+            right: 10px !important;
+            bottom: 10px !important;
+            width: 36px !important;
+            min-width: 36px !important;
+            height: 36px !important;
+            min-height: 36px !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            z-index: 20 !important;
             border-radius: 12px !important;
             background: linear-gradient(135deg, var(--accent-3), var(--accent-2)) !important;
             color: #ffffff !important;
             box-shadow: 0 10px 24px rgba(47, 129, 247, 0.30) !important;
+        }
+        div[data-testid="stChatInput"] button p,
+        div[data-testid="stChatInput"] button svg {
+            margin: 0 !important;
         }
 
         /* 用户资料卡片 */
