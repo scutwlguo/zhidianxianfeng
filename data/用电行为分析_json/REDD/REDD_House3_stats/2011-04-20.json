@@ -1,0 +1,549 @@
+{
+  "meta": {
+    "schema_version": "1.0",
+    "source": "daily_analysis_excel",
+    "generated_at": "2026-04-17 15:54:14"
+  },
+  "user": {
+    "dataset": "REDD",
+    "house_dir": "REDD_House3_stats",
+    "user_name": "用户3"
+  },
+  "date": "2011-04-20",
+  "pricing": {
+    "price_mode": "time_of_use_plus_tier",
+    "tier_level": 1,
+    "hourly_price_24h": [
+      0.22916875,
+      0.22916875,
+      0.22916875,
+      0.22916875,
+      0.22916875,
+      0.22916875,
+      0.22916875,
+      0.22916875,
+      0.58886875,
+      0.58886875,
+      0.99496875,
+      0.99496875,
+      0.58886875,
+      0.58886875,
+      0.99496875,
+      0.99496875,
+      0.99496875,
+      0.99496875,
+      0.99496875,
+      0.58886875,
+      0.58886875,
+      0.58886875,
+      0.58886875,
+      0.58886875
+    ],
+    "avg_price_per_kwh": 0.58741458,
+    "currency": "CNY"
+  },
+  "daily_summary": {
+    "total_energy_kwh": 10.809316,
+    "total_cost_cny": 2.447334,
+    "appliance_count": 10
+  },
+  "appliances": [
+    {
+      "appliance_code": "WD",
+      "appliance_name_cn": "洗烘一体机",
+      "energy_kwh": 6.387699,
+      "switch_on_count": 2,
+      "interval_source": "result_M_pairing",
+      "on_off_periods": [
+        {
+          "start_minute": 16,
+          "end_minute": 225,
+          "start": "00:16",
+          "end": "03:45",
+          "duration_min": 209.0,
+          "avg_power_w": 1704.272
+        },
+        {
+          "start_minute": 1291,
+          "end_minute": 1335,
+          "start": "21:31",
+          "end": "22:15",
+          "duration_min": 44.0,
+          "avg_power_w": 615.208
+        }
+      ]
+    },
+    {
+      "appliance_code": "UNK_其他电器",
+      "appliance_name_cn": "其他电器",
+      "energy_kwh": 3.46708,
+      "switch_on_count": 0,
+      "interval_source": "event_positive_fallback",
+      "on_off_periods": []
+    },
+    {
+      "appliance_code": "FG",
+      "appliance_name_cn": "冰箱",
+      "energy_kwh": 0.86843,
+      "switch_on_count": 34,
+      "interval_source": "result_M_pairing",
+      "on_off_periods": [
+        {
+          "start_minute": 14,
+          "end_minute": 44,
+          "start": "00:14",
+          "end": "00:44",
+          "duration_min": 30.0,
+          "avg_power_w": 136.937
+        },
+        {
+          "start_minute": 60,
+          "end_minute": 105,
+          "start": "01:00",
+          "end": "01:45",
+          "duration_min": 45.0,
+          "avg_power_w": 94.041
+        },
+        {
+          "start_minute": 120,
+          "end_minute": 135,
+          "start": "02:00",
+          "end": "02:15",
+          "duration_min": 15.0,
+          "avg_power_w": 86.931
+        },
+        {
+          "start_minute": 150,
+          "end_minute": 179,
+          "start": "02:30",
+          "end": "02:59",
+          "duration_min": 29.0,
+          "avg_power_w": 50.265
+        },
+        {
+          "start_minute": 195,
+          "end_minute": 210,
+          "start": "03:15",
+          "end": "03:30",
+          "duration_min": 15.0,
+          "avg_power_w": 90.958
+        },
+        {
+          "start_minute": 224,
+          "end_minute": 255,
+          "start": "03:44",
+          "end": "04:15",
+          "duration_min": 31.0,
+          "avg_power_w": 53.508
+        },
+        {
+          "start_minute": 270,
+          "end_minute": 285,
+          "start": "04:30",
+          "end": "04:45",
+          "duration_min": 15.0,
+          "avg_power_w": 91.118
+        },
+        {
+          "start_minute": 315,
+          "end_minute": 330,
+          "start": "05:15",
+          "end": "05:30",
+          "duration_min": 15.0,
+          "avg_power_w": 72.013
+        },
+        {
+          "start_minute": 345,
+          "end_minute": 360,
+          "start": "05:45",
+          "end": "06:00",
+          "duration_min": 15.0,
+          "avg_power_w": 72.014
+        },
+        {
+          "start_minute": 390,
+          "end_minute": 405,
+          "start": "06:30",
+          "end": "06:45",
+          "duration_min": 15.0,
+          "avg_power_w": 94.692
+        },
+        {
+          "start_minute": 420,
+          "end_minute": 450,
+          "start": "07:00",
+          "end": "07:30",
+          "duration_min": 30.0,
+          "avg_power_w": 38.898
+        },
+        {
+          "start_minute": 465,
+          "end_minute": 480,
+          "start": "07:45",
+          "end": "08:00",
+          "duration_min": 15.0,
+          "avg_power_w": 72.734
+        },
+        {
+          "start_minute": 510,
+          "end_minute": 525,
+          "start": "08:30",
+          "end": "08:45",
+          "duration_min": 15.0,
+          "avg_power_w": 92.855
+        },
+        {
+          "start_minute": 540,
+          "end_minute": 570,
+          "start": "09:00",
+          "end": "09:30",
+          "duration_min": 30.0,
+          "avg_power_w": 47.375
+        },
+        {
+          "start_minute": 584,
+          "end_minute": 600,
+          "start": "09:44",
+          "end": "10:00",
+          "duration_min": 16.0,
+          "avg_power_w": 75.029
+        },
+        {
+          "start_minute": 630,
+          "end_minute": 645,
+          "start": "10:30",
+          "end": "10:45",
+          "duration_min": 15.0,
+          "avg_power_w": 82.286
+        },
+        {
+          "start_minute": 659,
+          "end_minute": 689,
+          "start": "10:59",
+          "end": "11:29",
+          "duration_min": 30.0,
+          "avg_power_w": 76.626
+        },
+        {
+          "start_minute": 704,
+          "end_minute": 720,
+          "start": "11:44",
+          "end": "12:00",
+          "duration_min": 16.0,
+          "avg_power_w": 56.525
+        },
+        {
+          "start_minute": 750,
+          "end_minute": 765,
+          "start": "12:30",
+          "end": "12:45",
+          "duration_min": 15.0,
+          "avg_power_w": 77.797
+        },
+        {
+          "start_minute": 780,
+          "end_minute": 795,
+          "start": "13:00",
+          "end": "13:15",
+          "duration_min": 15.0,
+          "avg_power_w": 52.723
+        },
+        {
+          "start_minute": 825,
+          "end_minute": 840,
+          "start": "13:45",
+          "end": "14:00",
+          "duration_min": 15.0,
+          "avg_power_w": 81.013
+        },
+        {
+          "start_minute": 855,
+          "end_minute": 885,
+          "start": "14:15",
+          "end": "14:45",
+          "duration_min": 30.0,
+          "avg_power_w": 41.064
+        },
+        {
+          "start_minute": 900,
+          "end_minute": 915,
+          "start": "15:00",
+          "end": "15:15",
+          "duration_min": 15.0,
+          "avg_power_w": 75.538
+        },
+        {
+          "start_minute": 945,
+          "end_minute": 960,
+          "start": "15:45",
+          "end": "16:00",
+          "duration_min": 15.0,
+          "avg_power_w": 80.769
+        },
+        {
+          "start_minute": 975,
+          "end_minute": 1005,
+          "start": "16:15",
+          "end": "16:45",
+          "duration_min": 30.0,
+          "avg_power_w": 41.235
+        },
+        {
+          "start_minute": 1020,
+          "end_minute": 1035,
+          "start": "17:00",
+          "end": "17:15",
+          "duration_min": 15.0,
+          "avg_power_w": 83.79
+        },
+        {
+          "start_minute": 1064,
+          "end_minute": 1079,
+          "start": "17:44",
+          "end": "17:59",
+          "duration_min": 15.0,
+          "avg_power_w": 117.346
+        },
+        {
+          "start_minute": 1095,
+          "end_minute": 1124,
+          "start": "18:15",
+          "end": "18:44",
+          "duration_min": 29.0,
+          "avg_power_w": 42.926
+        },
+        {
+          "start_minute": 1139,
+          "end_minute": 1155,
+          "start": "18:59",
+          "end": "19:15",
+          "duration_min": 16.0,
+          "avg_power_w": 82.33
+        },
+        {
+          "start_minute": 1169,
+          "end_minute": 1185,
+          "start": "19:29",
+          "end": "19:45",
+          "duration_min": 16.0,
+          "avg_power_w": 63.054
+        },
+        {
+          "start_minute": 1215,
+          "end_minute": 1230,
+          "start": "20:15",
+          "end": "20:30",
+          "duration_min": 15.0,
+          "avg_power_w": 88.542
+        },
+        {
+          "start_minute": 1260,
+          "end_minute": 1275,
+          "start": "21:00",
+          "end": "21:15",
+          "duration_min": 15.0,
+          "avg_power_w": 75.544
+        },
+        {
+          "start_minute": 1288,
+          "end_minute": 1379,
+          "start": "21:28",
+          "end": "22:59",
+          "duration_min": 91.0,
+          "avg_power_w": 46.164
+        },
+        {
+          "start_minute": 1395,
+          "end_minute": 1409,
+          "start": "23:15",
+          "end": "23:29",
+          "duration_min": 14.0,
+          "avg_power_w": 77.626
+        }
+      ]
+    },
+    {
+      "appliance_code": "MW",
+      "appliance_name_cn": "微波炉",
+      "energy_kwh": 0.086107,
+      "switch_on_count": 1,
+      "interval_source": "result_M_pairing",
+      "on_off_periods": [
+        {
+          "start_minute": 661,
+          "end_minute": 691,
+          "start": "11:01",
+          "end": "11:31",
+          "duration_min": 30.0,
+          "avg_power_w": 172.214
+        }
+      ]
+    },
+    {
+      "appliance_code": "ET",
+      "appliance_name_cn": "电子设备",
+      "energy_kwh": 0.0,
+      "switch_on_count": 1,
+      "interval_source": "event_positive_fallback",
+      "on_off_periods": [
+        {
+          "start_minute": 13,
+          "end_minute": 14,
+          "start": "00:13",
+          "end": "00:14",
+          "duration_min": 1.0,
+          "avg_power_w": null
+        }
+      ]
+    },
+    {
+      "appliance_code": "KO",
+      "appliance_name_cn": "厨房插座",
+      "energy_kwh": 0.0,
+      "switch_on_count": 2,
+      "interval_source": "result_M_pairing",
+      "on_off_periods": [
+        {
+          "start_minute": 660,
+          "end_minute": 690,
+          "start": "11:00",
+          "end": "11:30",
+          "duration_min": 30.0,
+          "avg_power_w": 296.464
+        },
+        {
+          "start_minute": 1365,
+          "end_minute": 1380,
+          "start": "22:45",
+          "end": "23:00",
+          "duration_min": 15.0,
+          "avg_power_w": 366.372
+        }
+      ]
+    },
+    {
+      "appliance_code": "LT",
+      "appliance_name_cn": "照明",
+      "energy_kwh": 0.0,
+      "switch_on_count": 4,
+      "interval_source": "result_M_pairing",
+      "on_off_periods": [
+        {
+          "start_minute": 15,
+          "end_minute": 180,
+          "start": "00:15",
+          "end": "03:00",
+          "duration_min": 165.0,
+          "avg_power_w": 427.826
+        },
+        {
+          "start_minute": 585,
+          "end_minute": 705,
+          "start": "09:45",
+          "end": "11:45",
+          "duration_min": 120.0,
+          "avg_power_w": 194.318
+        },
+        {
+          "start_minute": 1065,
+          "end_minute": 1170,
+          "start": "17:45",
+          "end": "19:30",
+          "duration_min": 105.0,
+          "avg_power_w": 128.578
+        },
+        {
+          "start_minute": 1289,
+          "end_minute": 1381,
+          "start": "21:29",
+          "end": "23:01",
+          "duration_min": 92.0,
+          "avg_power_w": 229.988
+        }
+      ]
+    },
+    {
+      "appliance_code": "UNK_未知插座",
+      "appliance_name_cn": "未知插座",
+      "energy_kwh": 0.0,
+      "switch_on_count": 1,
+      "interval_source": "result_M_pairing",
+      "on_off_periods": [
+        {
+          "start_minute": 45,
+          "end_minute": 90,
+          "start": "00:45",
+          "end": "01:30",
+          "duration_min": 45.0,
+          "avg_power_w": 134.568
+        }
+      ]
+    },
+    {
+      "appliance_code": "UNK_浴室插座",
+      "appliance_name_cn": "浴室插座",
+      "energy_kwh": 0.0,
+      "switch_on_count": 1,
+      "interval_source": "result_M_pairing",
+      "on_off_periods": [
+        {
+          "start_minute": 629,
+          "end_minute": 658,
+          "start": "10:29",
+          "end": "10:58",
+          "duration_min": 29.0,
+          "avg_power_w": 712.302
+        }
+      ]
+    },
+    {
+      "appliance_code": "UNK_炉灶",
+      "appliance_name_cn": "炉灶",
+      "energy_kwh": 0.0,
+      "switch_on_count": 4,
+      "interval_source": "result_M_pairing",
+      "on_off_periods": [
+        {
+          "start_minute": 1080,
+          "end_minute": 1110,
+          "start": "18:00",
+          "end": "18:30",
+          "duration_min": 30.0,
+          "avg_power_w": 284.959
+        },
+        {
+          "start_minute": 1125,
+          "end_minute": 1140,
+          "start": "18:45",
+          "end": "19:00",
+          "duration_min": 15.0,
+          "avg_power_w": 281.513
+        },
+        {
+          "start_minute": 1290,
+          "end_minute": 1305,
+          "start": "21:30",
+          "end": "21:45",
+          "duration_min": 15.0,
+          "avg_power_w": 601.395
+        },
+        {
+          "start_minute": 1350,
+          "end_minute": 1410,
+          "start": "22:30",
+          "end": "23:30",
+          "duration_min": 60.0,
+          "avg_power_w": 253.201
+        }
+      ]
+    }
+  ],
+  "gpt_ready_hint": {
+    "task": "请基于该用户当日电器开启时段与各电器电量，分析用电习惯并给出可执行节能建议。",
+    "focus": [
+      "是否存在高峰时段电器扎堆运行",
+      "高能耗电器的开启频次和持续时间是否异常",
+      "可否通过错峰、缩短时长、参数优化降低能耗"
+    ]
+  }
+}

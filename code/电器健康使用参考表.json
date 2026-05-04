@@ -1,0 +1,397 @@
+{
+  "schema_version": "2.1",
+  "profile": "conservative_reference_rules",
+  "description": "用于GPT分析居民用电行为的保守型参考规则表（经验规则，可按地区、季节与家庭习惯调整）",
+  "usage_principles": [
+    "本表为经验性参考规则，不构成刚性判定标准",
+    "运行时段仅作为辅助判断依据，不应单独用于认定异常",
+    "优先依据单次时长、单日电量、持续低功率运行、重复启停等强特征进行分析",
+    "仅当用户明确执行峰谷分时电价时，才将时段迁移作为核心节能建议",
+    "节能建议应尽量面向具体设备、具体行为，避免脱离家庭生活场景的机械化判断",
+    "若设备行为既可能由生活习惯解释，也可能反映低效运行，应采用保守措辞，如“可能存在”“建议关注”“可进一步确认”"
+  ],
+  "global_rules": {
+    "price_per_kwh": 0.7,
+    "late_night_period": [
+      "23:00",
+      "06:00"
+    ],
+    "high_load_parallel_count_threshold": 2,
+    "high_load_appliance_codes": [
+      "AC",
+      "BL",
+      "DY",
+      "WM",
+      "DW",
+      "EH",
+      "MW",
+      "KT",
+      "RC",
+      "FG",
+      "SV"
+    ],
+    "weak_signal_only_fields": [
+      "typical_windows",
+      "late_night_period",
+      "high_load_parallel_count_threshold"
+    ],
+    "strong_signal_priority_fields": [
+      "max_single_on_minutes",
+      "max_daily_on_minutes",
+      "abnormal_daily_energy_kwh_hint"
+    ],
+    "report_style_rules": [
+      "优先指出最值得优化的1到3个设备，不平均分配建议",
+      "避免仅凭夜间使用或非典型时段使用直接判定异常",
+      "建议优先从缩短时长、减少保温/待机、优化设定参数、合并运行次数四类方式展开"
+    ]
+  },
+  "appliance_rules": {
+    "AC": {
+      "appliance_name_cn": "空调",
+      "rule_tier": "mixed_strong_weak",
+      "typical_windows": [
+        [
+          "11:00",
+          "16:00"
+        ],
+        [
+          "19:00",
+          "24:00"
+        ]
+      ],
+      "max_single_on_minutes": 360,
+      "max_daily_on_minutes": 720,
+      "abnormal_daily_energy_kwh_hint": 12,
+      "analysis_focus": [
+        "是否存在长时间连续运行",
+        "是否存在日电量显著偏高",
+        "是否存在频繁启停",
+        "是否可能因设定温度不合理或门窗开合导致低效运行"
+      ],
+      "risk_hints": [
+        "长时间连续运行建议结合温控与房间保温条件评估",
+        "频繁启停可能与设定温度或门窗开合有关"
+      ],
+      "suggestion_directions": [
+        "优先建议检查设定温度与睡眠模式",
+        "建议结合门窗密闭与定时关闭策略",
+        "若夜间长时运行，可建议评估是否存在过冷或过热设定"
+      ]
+    },
+    "BL": {
+      "appliance_name_cn": "热水器",
+      "rule_tier": "strong_duration",
+      "typical_windows": [
+        [
+          "06:00",
+          "09:00"
+        ],
+        [
+          "18:00",
+          "23:00"
+        ]
+      ],
+      "max_single_on_minutes": 60,
+      "max_daily_on_minutes": 240,
+      "abnormal_daily_energy_kwh_hint": 8,
+      "analysis_focus": [
+        "是否存在单次运行过长",
+        "是否存在多段重复补热",
+        "是否存在长时间保温或未及时关停"
+      ],
+      "risk_hints": [
+        "单次持续时间过长可能存在反复保温或未及时关停",
+        "夜间长时运行可作为辅助风险线索，但需结合家庭作息判断"
+      ],
+      "suggestion_directions": [
+        "建议缩短保温时间",
+        "建议按洗浴前后集中加热，减少全天维持温度",
+        "可建议检查是否有长时间无人使用却持续加热的情况"
+      ]
+    },
+    "DY": {
+      "appliance_name_cn": "烘干机",
+      "rule_tier": "strong_duration",
+      "typical_windows": [
+        [
+          "08:00",
+          "23:00"
+        ]
+      ],
+      "max_single_on_minutes": 120,
+      "max_daily_on_minutes": 240,
+      "abnormal_daily_energy_kwh_hint": 6,
+      "analysis_focus": [
+        "是否存在单次烘干时间偏长",
+        "是否存在重复烘干",
+        "是否与洗衣机使用割裂，导致分散启动"
+      ],
+      "risk_hints": [
+        "单次时长明显偏长需关注是否低效烘干或重复运行",
+        "可与洗衣机衔接使用，减少分散启动"
+      ],
+      "suggestion_directions": [
+        "建议检查衣物装载量与烘干程序匹配性",
+        "建议减少重复烘干或过度烘干",
+        "可建议优先自然晾晒或缩短高温档使用时间"
+      ]
+    },
+    "WM": {
+      "appliance_name_cn": "洗衣机",
+      "rule_tier": "strong_duration",
+      "typical_windows": [
+        [
+          "07:00",
+          "23:00"
+        ]
+      ],
+      "max_single_on_minutes": 120,
+      "max_daily_on_minutes": 240,
+      "abnormal_daily_energy_kwh_hint": 4,
+      "analysis_focus": [
+        "是否存在单日多次运行",
+        "是否存在单次时间异常偏长",
+        "是否存在小批量高频洗涤"
+      ],
+      "risk_hints": [
+        "单日多次运行可评估是否有合并洗涤空间",
+        "深夜运行仅作弱信号提示，不应单独判定异常"
+      ],
+      "suggestion_directions": [
+        "建议满载或接近满载再运行",
+        "建议减少小批量高频洗涤",
+        "如单次时长偏长，可建议检查程序选择是否过强"
+      ]
+    },
+    "DW": {
+      "appliance_name_cn": "洗碗机",
+      "rule_tier": "strong_duration",
+      "typical_windows": [
+        [
+          "11:30",
+          "15:00"
+        ],
+        [
+          "19:00",
+          "24:00"
+        ]
+      ],
+      "max_single_on_minutes": 150,
+      "max_daily_on_minutes": 300,
+      "abnormal_daily_energy_kwh_hint": 4,
+      "analysis_focus": [
+        "是否存在单次运行偏长",
+        "是否存在高温或强化模式使用过多",
+        "是否存在非满载运行"
+      ],
+      "risk_hints": [
+        "单次超长运行可关注是否频繁使用高温或加强模式",
+        "建议结合满载策略减少不必要运行次数"
+      ],
+      "suggestion_directions": [
+        "建议满载后再启动",
+        "建议减少高温强化模式的不必要使用",
+        "如运行时间偏长，可建议选择更合适的程序档位"
+      ]
+    },
+    "EH": {
+      "appliance_name_cn": "电暖器",
+      "rule_tier": "mixed_strong_weak",
+      "typical_windows": [
+        [
+          "06:00",
+          "09:30"
+        ],
+        [
+          "18:00",
+          "24:00"
+        ]
+      ],
+      "max_single_on_minutes": 180,
+      "max_daily_on_minutes": 480,
+      "abnormal_daily_energy_kwh_hint": 10,
+      "analysis_focus": [
+        "是否存在长时间连续运行",
+        "是否存在日电量明显偏高",
+        "是否可能因持续高档位加热导致低效耗能"
+      ],
+      "risk_hints": [
+        "长时间连续运行建议分段并结合温控",
+        "夜间持续运行需结合室温与有人状态综合判断"
+      ],
+      "suggestion_directions": [
+        "建议结合恒温或定时功能使用",
+        "建议避免长时间高档持续加热",
+        "可建议仅在有人活动区域局部使用"
+      ]
+    },
+    "MW": {
+      "appliance_name_cn": "微波炉",
+      "rule_tier": "strong_duration",
+      "typical_windows": [
+        [
+          "06:00",
+          "09:30"
+        ],
+        [
+          "11:00",
+          "14:30"
+        ],
+        [
+          "17:00",
+          "21:30"
+        ]
+      ],
+      "max_single_on_minutes": 15,
+      "max_daily_on_minutes": 60,
+      "abnormal_daily_energy_kwh_hint": 2,
+      "analysis_focus": [
+        "是否存在单次运行异常偏长",
+        "是否存在频繁短时重复加热",
+        "是否存在误设定或空转风险"
+      ],
+      "risk_hints": [
+        "单次运行显著过长需排查误设定或空转",
+        "频繁短时重复可考虑集中加热减少损耗"
+      ],
+      "suggestion_directions": [
+        "建议按实际需求集中加热",
+        "建议避免重复短时启动",
+        "如单次运行异常偏长，应提示检查设定时间"
+      ]
+    },
+    "KT": {
+      "appliance_name_cn": "电热水壶",
+      "rule_tier": "strong_duration",
+      "typical_windows": [
+        [
+          "06:00",
+          "10:00"
+        ],
+        [
+          "14:00",
+          "17:00"
+        ],
+        [
+          "19:00",
+          "23:00"
+        ]
+      ],
+      "max_single_on_minutes": 15,
+      "max_daily_on_minutes": 60,
+      "abnormal_daily_energy_kwh_hint": 2,
+      "analysis_focus": [
+        "是否存在频繁重复烧水",
+        "是否存在持续加热过长",
+        "是否存在超出合理需求的高频使用"
+      ],
+      "risk_hints": [
+        "频繁重复烧水可考虑按需求量一次烧开",
+        "持续加热过长需检查是否存在空烧或未断电风险"
+      ],
+      "suggestion_directions": [
+        "建议按实际饮水需求烧水",
+        "建议减少反复烧开行为",
+        "如频次异常偏高，可建议使用保温方式替代重复加热"
+      ]
+    },
+    "RC": {
+      "appliance_name_cn": "电饭煲",
+      "rule_tier": "strong_duration",
+      "typical_windows": [
+        [
+          "06:00",
+          "09:00"
+        ],
+        [
+          "10:30",
+          "14:00"
+        ],
+        [
+          "16:30",
+          "21:30"
+        ]
+      ],
+      "max_single_on_minutes": 150,
+      "max_daily_on_minutes": 300,
+      "abnormal_daily_energy_kwh_hint": 4,
+      "analysis_focus": [
+        "是否存在单次运行过长",
+        "是否存在长时间保温",
+        "是否存在就餐结束后继续通电"
+      ],
+      "risk_hints": [
+        "长时间保温通常意味着可优化空间",
+        "可通过定时与就餐节律匹配来降低无效耗电"
+      ],
+      "suggestion_directions": [
+        "建议缩短保温时间",
+        "建议按就餐时间定时启动",
+        "如饭熟后长时间持续运行，可提示及时断电"
+      ]
+    },
+    "FG": {
+      "appliance_name_cn": "冰箱",
+      "rule_tier": "always_on_exception",
+      "typical_windows": [
+        [
+          "00:00",
+          "24:00"
+        ]
+      ],
+      "max_single_on_minutes": 1440,
+      "max_daily_on_minutes": 1440,
+      "abnormal_daily_energy_kwh_hint": 3,
+      "analysis_focus": [
+        "是否存在日电量异常抬升",
+        "是否连续多天高耗",
+        "是否可能因门封、温控或散热条件导致能耗偏高"
+      ],
+      "risk_hints": [
+        "常开设备不以时段判定异常，重点看日电量异常抬升",
+        "若连续多天高耗可排查门封、温控设置与散热条件"
+      ],
+      "suggestion_directions": [
+        "建议检查门封是否严密",
+        "建议避免频繁开门和过度塞满",
+        "如能耗持续偏高，可建议检查温控档位与散热空间"
+      ]
+    },
+    "SV": {
+      "appliance_name_cn": "电炉",
+      "rule_tier": "strong_duration",
+      "typical_windows": [
+        [
+          "06:30",
+          "09:30"
+        ],
+        [
+          "11:00",
+          "14:30"
+        ],
+        [
+          "17:00",
+          "21:30"
+        ]
+      ],
+      "max_single_on_minutes": 150,
+      "max_daily_on_minutes": 360,
+      "abnormal_daily_energy_kwh_hint": 7,
+      "analysis_focus": [
+        "是否存在长时间低火保温",
+        "是否存在与其他大功率设备叠加运行",
+        "是否存在单日烹饪时间明显偏长"
+      ],
+      "risk_hints": [
+        "长时低火保温可考虑改为间歇加热",
+        "与其他大功率设备叠加时可提示集中负荷风险"
+      ],
+      "suggestion_directions": [
+        "建议减少长时间保温式加热",
+        "建议集中烹饪、缩短空载预热或低效持续加热",
+        "如与其他大功率设备重叠，可建议适度错开使用"
+      ]
+    }
+  }
+}

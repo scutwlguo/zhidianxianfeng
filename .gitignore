@@ -1,0 +1,7 @@
+﻿__pycache__/
+*.pyc
+*.7z
+.streamlit/secrets.toml
+.env
+*.env
+code/.env

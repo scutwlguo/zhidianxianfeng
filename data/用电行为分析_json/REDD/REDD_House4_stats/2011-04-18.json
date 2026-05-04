@@ -1,0 +1,247 @@
+{
+  "meta": {
+    "schema_version": "1.0",
+    "source": "daily_analysis_excel",
+    "generated_at": "2026-04-17 15:54:17"
+  },
+  "user": {
+    "dataset": "REDD",
+    "house_dir": "REDD_House4_stats",
+    "user_name": "用户4"
+  },
+  "date": "2011-04-18",
+  "pricing": {
+    "price_mode": "time_of_use_plus_tier",
+    "tier_level": 1,
+    "hourly_price_24h": [
+      0.22916875,
+      0.22916875,
+      0.22916875,
+      0.22916875,
+      0.22916875,
+      0.22916875,
+      0.22916875,
+      0.22916875,
+      0.58886875,
+      0.58886875,
+      0.99496875,
+      0.99496875,
+      0.58886875,
+      0.58886875,
+      0.99496875,
+      0.99496875,
+      0.99496875,
+      0.99496875,
+      0.99496875,
+      0.58886875,
+      0.58886875,
+      0.58886875,
+      0.58886875,
+      0.58886875
+    ],
+    "avg_price_per_kwh": 0.58741458,
+    "currency": "CNY"
+  },
+  "daily_summary": {
+    "total_energy_kwh": 6.920846,
+    "total_cost_cny": 4.065406,
+    "appliance_count": 4
+  },
+  "appliances": [
+    {
+      "appliance_code": "UNK_其他电器",
+      "appliance_name_cn": "其他电器",
+      "energy_kwh": 6.920846,
+      "switch_on_count": 0,
+      "interval_source": "event_positive_fallback",
+      "on_off_periods": []
+    },
+    {
+      "appliance_code": "KO",
+      "appliance_name_cn": "厨房插座",
+      "energy_kwh": 0.0,
+      "switch_on_count": 11,
+      "interval_source": "result_M_pairing",
+      "on_off_periods": [
+        {
+          "start_minute": 330,
+          "end_minute": 360,
+          "start": "05:30",
+          "end": "06:00",
+          "duration_min": 30.0,
+          "avg_power_w": 95.938
+        },
+        {
+          "start_minute": 390,
+          "end_minute": 420,
+          "start": "06:30",
+          "end": "07:00",
+          "duration_min": 30.0,
+          "avg_power_w": 97.859
+        },
+        {
+          "start_minute": 779,
+          "end_minute": 810,
+          "start": "12:59",
+          "end": "13:30",
+          "duration_min": 31.0,
+          "avg_power_w": 90.074
+        },
+        {
+          "start_minute": 840,
+          "end_minute": 869,
+          "start": "14:00",
+          "end": "14:29",
+          "duration_min": 29.0,
+          "avg_power_w": 108.828
+        },
+        {
+          "start_minute": 900,
+          "end_minute": 944,
+          "start": "15:00",
+          "end": "15:44",
+          "duration_min": 44.0,
+          "avg_power_w": 91.932
+        },
+        {
+          "start_minute": 959,
+          "end_minute": 1005,
+          "start": "15:59",
+          "end": "16:45",
+          "duration_min": 46.0,
+          "avg_power_w": 84.171
+        },
+        {
+          "start_minute": 1034,
+          "end_minute": 1065,
+          "start": "17:14",
+          "end": "17:45",
+          "duration_min": 31.0,
+          "avg_power_w": 123.751
+        },
+        {
+          "start_minute": 1095,
+          "end_minute": 1125,
+          "start": "18:15",
+          "end": "18:45",
+          "duration_min": 30.0,
+          "avg_power_w": 95.539
+        },
+        {
+          "start_minute": 1170,
+          "end_minute": 1320,
+          "start": "19:30",
+          "end": "22:00",
+          "duration_min": 150.0,
+          "avg_power_w": 89.726
+        },
+        {
+          "start_minute": 1335,
+          "end_minute": 1380,
+          "start": "22:15",
+          "end": "23:00",
+          "duration_min": 45.0,
+          "avg_power_w": 104.159
+        },
+        {
+          "start_minute": 1410,
+          "end_minute": 1437,
+          "start": "23:30",
+          "end": "23:57",
+          "duration_min": 27.0,
+          "avg_power_w": 84.248
+        }
+      ]
+    },
+    {
+      "appliance_code": "LT",
+      "appliance_name_cn": "照明",
+      "energy_kwh": 0.0,
+      "switch_on_count": 6,
+      "interval_source": "result_M_pairing",
+      "on_off_periods": [
+        {
+          "start_minute": 780,
+          "end_minute": 870,
+          "start": "13:00",
+          "end": "14:30",
+          "duration_min": 90.0,
+          "avg_power_w": 71.217
+        },
+        {
+          "start_minute": 930,
+          "end_minute": 945,
+          "start": "15:30",
+          "end": "15:45",
+          "duration_min": 15.0,
+          "avg_power_w": 31.57
+        },
+        {
+          "start_minute": 960,
+          "end_minute": 975,
+          "start": "16:00",
+          "end": "16:15",
+          "duration_min": 15.0,
+          "avg_power_w": 33.407
+        },
+        {
+          "start_minute": 1035,
+          "end_minute": 1050,
+          "start": "17:15",
+          "end": "17:30",
+          "duration_min": 15.0,
+          "avg_power_w": 32.684
+        },
+        {
+          "start_minute": 1185,
+          "end_minute": 1200,
+          "start": "19:45",
+          "end": "20:00",
+          "duration_min": 15.0,
+          "avg_power_w": 35.494
+        },
+        {
+          "start_minute": 1215,
+          "end_minute": 1438,
+          "start": "20:15",
+          "end": "23:58",
+          "duration_min": 223.0,
+          "avg_power_w": 137.428
+        }
+      ]
+    },
+    {
+      "appliance_code": "UNK_炉灶",
+      "appliance_name_cn": "炉灶",
+      "energy_kwh": 0.0,
+      "switch_on_count": 2,
+      "interval_source": "result_M_pairing",
+      "on_off_periods": [
+        {
+          "start_minute": 300,
+          "end_minute": 450,
+          "start": "05:00",
+          "end": "07:30",
+          "duration_min": 150.0,
+          "avg_power_w": 391.315
+        },
+        {
+          "start_minute": 781,
+          "end_minute": 1439,
+          "start": "13:01",
+          "end": "23:59",
+          "duration_min": 658.0,
+          "avg_power_w": 411.395
+        }
+      ]
+    }
+  ],
+  "gpt_ready_hint": {
+    "task": "请基于该用户当日电器开启时段与各电器电量，分析用电习惯并给出可执行节能建议。",
+    "focus": [
+      "是否存在高峰时段电器扎堆运行",
+      "高能耗电器的开启频次和持续时间是否异常",
+      "可否通过错峰、缩短时长、参数优化降低能耗"
+    ]
+  }
+}

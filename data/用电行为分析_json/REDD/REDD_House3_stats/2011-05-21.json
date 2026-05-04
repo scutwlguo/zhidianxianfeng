@@ -1,0 +1,257 @@
+{
+  "meta": {
+    "schema_version": "1.0",
+    "source": "daily_analysis_excel",
+    "generated_at": "2026-04-17 15:54:16"
+  },
+  "user": {
+    "dataset": "REDD",
+    "house_dir": "REDD_House3_stats",
+    "user_name": "用户3"
+  },
+  "date": "2011-05-21",
+  "pricing": {
+    "price_mode": "time_of_use_plus_tier",
+    "tier_level": 1,
+    "hourly_price_24h": [
+      0.22916875,
+      0.22916875,
+      0.22916875,
+      0.22916875,
+      0.22916875,
+      0.22916875,
+      0.22916875,
+      0.22916875,
+      0.58886875,
+      0.58886875,
+      0.99496875,
+      0.99496875,
+      0.58886875,
+      0.58886875,
+      0.99496875,
+      0.99496875,
+      0.99496875,
+      0.99496875,
+      0.99496875,
+      0.58886875,
+      0.58886875,
+      0.58886875,
+      0.58886875,
+      0.58886875
+    ],
+    "avg_price_per_kwh": 0.58741458,
+    "currency": "CNY"
+  },
+  "daily_summary": {
+    "total_energy_kwh": 1.130433,
+    "total_cost_cny": 0.383211,
+    "appliance_count": 6
+  },
+  "appliances": [
+    {
+      "appliance_code": "UNK_其他电器",
+      "appliance_name_cn": "其他电器",
+      "energy_kwh": 0.609711,
+      "switch_on_count": 0,
+      "interval_source": "event_positive_fallback",
+      "on_off_periods": []
+    },
+    {
+      "appliance_code": "FG",
+      "appliance_name_cn": "冰箱",
+      "energy_kwh": 0.430334,
+      "switch_on_count": 10,
+      "interval_source": "result_M_pairing",
+      "on_off_periods": [
+        {
+          "start_minute": 840,
+          "end_minute": 854,
+          "start": "14:00",
+          "end": "14:14",
+          "duration_min": 14.0,
+          "avg_power_w": 46.429
+        },
+        {
+          "start_minute": 900,
+          "end_minute": 915,
+          "start": "15:00",
+          "end": "15:15",
+          "duration_min": 15.0,
+          "avg_power_w": 37.584
+        },
+        {
+          "start_minute": 944,
+          "end_minute": 975,
+          "start": "15:44",
+          "end": "16:15",
+          "duration_min": 31.0,
+          "avg_power_w": 71.865
+        },
+        {
+          "start_minute": 1020,
+          "end_minute": 1035,
+          "start": "17:00",
+          "end": "17:15",
+          "duration_min": 15.0,
+          "avg_power_w": 61.907
+        },
+        {
+          "start_minute": 1065,
+          "end_minute": 1080,
+          "start": "17:45",
+          "end": "18:00",
+          "duration_min": 15.0,
+          "avg_power_w": 61.609
+        },
+        {
+          "start_minute": 1125,
+          "end_minute": 1140,
+          "start": "18:45",
+          "end": "19:00",
+          "duration_min": 15.0,
+          "avg_power_w": 62.709
+        },
+        {
+          "start_minute": 1170,
+          "end_minute": 1185,
+          "start": "19:30",
+          "end": "19:45",
+          "duration_min": 15.0,
+          "avg_power_w": 82.38
+        },
+        {
+          "start_minute": 1215,
+          "end_minute": 1245,
+          "start": "20:15",
+          "end": "20:45",
+          "duration_min": 30.0,
+          "avg_power_w": 93.667
+        },
+        {
+          "start_minute": 1260,
+          "end_minute": 1363,
+          "start": "21:00",
+          "end": "22:43",
+          "duration_min": 103.0,
+          "avg_power_w": 114.438
+        },
+        {
+          "start_minute": 1379,
+          "end_minute": 1438,
+          "start": "22:59",
+          "end": "23:58",
+          "duration_min": 59.0,
+          "avg_power_w": 63.598
+        }
+      ]
+    },
+    {
+      "appliance_code": "MW",
+      "appliance_name_cn": "微波炉",
+      "energy_kwh": 0.090388,
+      "switch_on_count": 2,
+      "interval_source": "result_M_pairing",
+      "on_off_periods": [
+        {
+          "start_minute": 945,
+          "end_minute": 960,
+          "start": "15:45",
+          "end": "16:00",
+          "duration_min": 15.0,
+          "avg_power_w": 231.92
+        },
+        {
+          "start_minute": 1350,
+          "end_minute": 1366,
+          "start": "22:30",
+          "end": "22:46",
+          "duration_min": 16.0,
+          "avg_power_w": 121.53
+        }
+      ]
+    },
+    {
+      "appliance_code": "ET",
+      "appliance_name_cn": "电子设备",
+      "energy_kwh": 0.0,
+      "switch_on_count": 1,
+      "interval_source": "event_positive_fallback",
+      "on_off_periods": [
+        {
+          "start_minute": 839,
+          "end_minute": 840,
+          "start": "13:59",
+          "end": "14:00",
+          "duration_min": 1.0,
+          "avg_power_w": null
+        }
+      ]
+    },
+    {
+      "appliance_code": "KO",
+      "appliance_name_cn": "厨房插座",
+      "energy_kwh": 0.0,
+      "switch_on_count": 1,
+      "interval_source": "result_M_pairing",
+      "on_off_periods": [
+        {
+          "start_minute": 1334,
+          "end_minute": 1364,
+          "start": "22:14",
+          "end": "22:44",
+          "duration_min": 30.0,
+          "avg_power_w": 69.891
+        }
+      ]
+    },
+    {
+      "appliance_code": "LT",
+      "appliance_name_cn": "照明",
+      "energy_kwh": 0.0,
+      "switch_on_count": 4,
+      "interval_source": "result_M_pairing",
+      "on_off_periods": [
+        {
+          "start_minute": 841,
+          "end_minute": 855,
+          "start": "14:01",
+          "end": "14:15",
+          "duration_min": 14.0,
+          "avg_power_w": 117.246
+        },
+        {
+          "start_minute": 930,
+          "end_minute": 990,
+          "start": "15:30",
+          "end": "16:30",
+          "duration_min": 60.0,
+          "avg_power_w": 140.254
+        },
+        {
+          "start_minute": 1335,
+          "end_minute": 1365,
+          "start": "22:15",
+          "end": "22:45",
+          "duration_min": 30.0,
+          "avg_power_w": 93.356
+        },
+        {
+          "start_minute": 1380,
+          "end_minute": 1439,
+          "start": "23:00",
+          "end": "23:59",
+          "duration_min": 59.0,
+          "avg_power_w": 323.817
+        }
+      ]
+    }
+  ],
+  "gpt_ready_hint": {
+    "task": "请基于该用户当日电器开启时段与各电器电量，分析用电习惯并给出可执行节能建议。",
+    "focus": [
+      "是否存在高峰时段电器扎堆运行",
+      "高能耗电器的开启频次和持续时间是否异常",
+      "可否通过错峰、缩短时长、参数优化降低能耗"
+    ]
+  }
+}
