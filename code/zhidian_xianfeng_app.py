@@ -83,8 +83,8 @@ from model_config import FIXED_MODEL_NAME, FIXED_PLATFORM
 PRICE_PER_KWH = 0.7
 SUPPORTED_DATASET_NAMES = ["REDD", "UK-DALE", "REFIT"]
 DEFAULT_PASSWORD = "xxxx"
-CHAT_PANEL_HEIGHT = 1410
-CHAT_MESSAGES_HEIGHT = 1150
+CHAT_PANEL_HEIGHT = 1040
+CHAT_MESSAGES_HEIGHT = 610
 DEFAULT_ROOT_CANDIDATES = [
     os.getenv("APP_DATA_ROOT", "").strip(),
     r"F:/研究生文件/节能减排/云端功率分析代码/output/按日分析结果_全部",
@@ -1513,10 +1513,10 @@ def apply_global_theme() -> None:
 
         .chat-scroll-wrap {
             border: 1px solid rgba(110,168,255,.12);
-            border-radius: 16px 16px 0 0;
+            border-radius: 16px;
             background: linear-gradient(180deg, rgba(6, 14, 27, 0.84), rgba(5, 12, 24, 0.94));
             padding: 6px 6px 2px 6px;
-            margin-bottom: 0 !important;
+            margin-bottom: 8px !important;
         }
 
         .quick-question-wrap {
@@ -1524,7 +1524,7 @@ def apply_global_theme() -> None:
             align-items: center;
             justify-content: space-between;
             gap: 8px;
-            margin: 8px 2px 8px;
+            margin: 2px 2px 6px;
         }
         .quick-question-label {
             color: var(--text-2);
@@ -1547,21 +1547,29 @@ def apply_global_theme() -> None:
         }
         div[data-testid="stHorizontalBlock"] div[data-testid="column"] .stButton button {
             white-space: nowrap;
+            min-height: 34px !important;
+            height: 34px !important;
+            padding: 0 10px !important;
+            border-radius: 12px !important;
+            background: linear-gradient(180deg, rgba(20, 49, 94, 0.95), rgba(11, 31, 65, 0.98)) !important;
+            border-color: rgba(110, 168, 255, 0.20) !important;
+            color: #dcecff !important;
+            font-size: 12px !important;
+            font-weight: 700 !important;
         }
 
         div[data-testid="stForm"] {
             border: none !important;
             background: transparent !important;
-            margin-top: 0 !important;
+            margin-top: 8px !important;
         }
 
         div[data-testid="stForm"] form {
             position: relative !important;
             background: linear-gradient(180deg, rgba(14, 22, 38, 0.98), rgba(9, 14, 27, 0.99)) !important;
-            border: 1px solid rgba(110,168,255,.16) !important;
-            border-top: 0 !important;
-            border-radius: 0 0 18px 18px !important;
-            padding: 8px 10px 8px 10px !important;
+            border: 1px solid rgba(110,168,255,.18) !important;
+            border-radius: 16px !important;
+            padding: 7px 10px !important;
             box-shadow: inset 0 1px 0 rgba(255,255,255,0.02), 0 14px 32px rgba(1, 6, 18, 0.32) !important;
             overflow: hidden !important;
         }
@@ -1583,11 +1591,11 @@ def apply_global_theme() -> None:
             background: transparent !important;
             color: var(--text-1) !important;
             border: none !important;
-            padding: 8px 58px 22px 2px !important;
-            line-height: 1.72 !important;
+            padding: 8px 54px 14px 2px !important;
+            line-height: 1.55 !important;
             font-size: 14px !important;
             resize: none !important;
-            min-height: 96px !important;
+            min-height: 74px !important;
         }
 
         div[data-testid="stForm"] form textarea::placeholder {
@@ -1597,7 +1605,7 @@ def apply_global_theme() -> None:
         /* 让 form 成为定位锚点，按钮绝对定位到右下角 */
         div[data-testid="stForm"] div[data-testid="stFormSubmitButton"] {
             position: absolute !important;
-            bottom: 10px !important;
+            bottom: 9px !important;
             right: 10px !important;
             left: auto !important;
             width: auto !important;
@@ -1612,10 +1620,10 @@ def apply_global_theme() -> None:
         div[data-testid="stForm"] form div[data-testid="stFormSubmitButton"] > button,
         div[data-testid="stForm"] form [data-testid="stFormSubmitButton"] > button {
             position: relative !important;
-            width: 40px !important;
-            min-width: 40px !important;
-            height: 40px !important;
-            min-height: 40px !important;
+            width: 36px !important;
+            min-width: 36px !important;
+            height: 36px !important;
+            min-height: 36px !important;
             border: none !important;
             border-radius: 12px !important;
             padding: 0 !important;
@@ -2354,7 +2362,7 @@ def render_chat_panel(house_key: str, selected_date, max_available_date) -> None
             "输入问题",
             label_visibility="collapsed",
             placeholder="请输入您的问题，例如：最近用电情况怎么样？",
-            height=118,
+            height=88,
             key="chat_user_input",
         )
         send_clicked = st.form_submit_button("➤", help="发送")
