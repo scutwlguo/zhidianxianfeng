@@ -1512,10 +1512,10 @@ def apply_global_theme() -> None:
         }
 
         .chat-scroll-wrap {
-            border: 1px solid rgba(110,168,255,.12);
-            border-radius: 16px;
-            background: linear-gradient(180deg, rgba(6, 14, 27, 0.84), rgba(5, 12, 24, 0.94));
-            padding: 6px 6px 2px 6px;
+            border: none;
+            border-radius: 0;
+            background: transparent;
+            padding: 2px 0 0 0;
             margin-bottom: 8px !important;
         }
 
@@ -1558,96 +1558,30 @@ def apply_global_theme() -> None:
             font-weight: 700 !important;
         }
 
-        div[data-testid="stForm"] {
+        div[data-testid="stChatInput"] {
+            margin-top: 10px !important;
             border: none !important;
             background: transparent !important;
-            margin-top: 8px !important;
         }
-
-        div[data-testid="stForm"] form {
-            position: relative !important;
-            background: linear-gradient(180deg, rgba(14, 22, 38, 0.98), rgba(9, 14, 27, 0.99)) !important;
-            border: 1px solid rgba(110,168,255,.18) !important;
-            border-radius: 16px !important;
-            padding: 7px 10px !important;
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.02), 0 14px 32px rgba(1, 6, 18, 0.32) !important;
-            overflow: hidden !important;
+        div[data-testid="stChatInput"] > div {
+            background: linear-gradient(180deg, rgba(14, 22, 38, 0.92), rgba(8, 15, 29, 0.96)) !important;
+            border: 1px solid rgba(110, 168, 255, 0.16) !important;
+            border-radius: 18px !important;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.03), 0 14px 34px rgba(1, 6, 18, 0.24) !important;
         }
-
-        div[data-testid="stForm"] form .stTextArea {
-            margin-bottom: 0 !important;
-        }
-
-        div[data-testid="stForm"] form div[data-baseweb="textarea"],
-        div[data-testid="stForm"] form div[data-baseweb="textarea"] > div {
-            background: transparent !important;
-            border: none !important;
-            box-shadow: none !important;
-            width: 100% !important;
-            max-width: 100% !important;
-        }
-
-        div[data-testid="stForm"] form textarea {
-            background: transparent !important;
+        div[data-testid="stChatInput"] textarea {
             color: var(--text-1) !important;
-            border: none !important;
-            padding: 8px 54px 14px 2px !important;
-            line-height: 1.55 !important;
             font-size: 14px !important;
-            resize: none !important;
-            min-height: 74px !important;
+            line-height: 1.55 !important;
         }
-
-        div[data-testid="stForm"] form textarea::placeholder {
+        div[data-testid="stChatInput"] textarea::placeholder {
             color: #8394b8 !important;
         }
-
-        /* 让 form 成为定位锚点，按钮绝对定位到右下角 */
-        div[data-testid="stForm"] div[data-testid="stFormSubmitButton"] {
-            position: absolute !important;
-            bottom: 9px !important;
-            right: 10px !important;
-            left: auto !important;
-            width: auto !important;
-            z-index: 30 !important;
-            margin: 0 !important;
-            padding: 0 !important;
-        }
-
-        div[data-testid="stForm"] button[kind="secondaryFormSubmit"],
-        div[data-testid="stForm"] button[kind="primaryFormSubmit"],
-        div[data-testid="stForm"] div[data-testid="stFormSubmitButton"] > button,
-        div[data-testid="stForm"] form div[data-testid="stFormSubmitButton"] > button,
-        div[data-testid="stForm"] form [data-testid="stFormSubmitButton"] > button {
-            position: relative !important;
-            width: 36px !important;
-            min-width: 36px !important;
-            height: 36px !important;
-            min-height: 36px !important;
-            border: none !important;
+        div[data-testid="stChatInput"] button {
             border-radius: 12px !important;
-            padding: 0 !important;
-            font-size: 18px !important;
-            line-height: 1 !important;
             background: linear-gradient(135deg, var(--accent-3), var(--accent-2)) !important;
             color: #ffffff !important;
             box-shadow: 0 10px 24px rgba(47, 129, 247, 0.30) !important;
-        }
-
-        div[data-testid="stForm"] div[data-testid="stFormSubmitButton"] > button:hover,
-        div[data-testid="stForm"] form div[data-testid="stFormSubmitButton"] > button:hover,
-        div[data-testid="stForm"] form [data-testid="stFormSubmitButton"] > button:hover,
-        div[data-testid="stForm"] button[kind="secondaryFormSubmit"]:hover,
-        div[data-testid="stForm"] button[kind="primaryFormSubmit"]:hover {
-            filter: brightness(1.05);
-            transform: translateY(-1px);
-        }
-
-        div[data-testid="stForm"] form div[data-testid="stFormSubmitButton"] > button p,
-        div[data-testid="stForm"] form [data-testid="stFormSubmitButton"] > button p {
-            font-size: 18px !important;
-            line-height: 1 !important;
-            margin: 0 !important;
         }
 
         /* 用户资料卡片 */
@@ -2346,10 +2280,10 @@ def render_chat_panel(house_key: str, selected_date, max_available_date) -> None
         unsafe_allow_html=True,
     )
     quick_questions = [
-        ("今日总结", "今天用电情况怎么样？"),
-        ("高耗能设备", "今天哪些设备最耗电？"),
-        ("异常风险", "有没有异常运行或高风险时段？"),
-        ("节能建议", "请给我几条节能建议。"),
+        ("今日", "今天用电情况怎么样？"),
+        ("设备", "今天哪些设备最耗电？"),
+        ("风险", "有没有异常运行或高风险时段？"),
+        ("节能", "请给我几条节能建议。"),
     ]
     quick_cols = st.columns(2)
     for idx, (label, question) in enumerate(quick_questions):
@@ -2357,42 +2291,12 @@ def render_chat_panel(house_key: str, selected_date, max_available_date) -> None
             if st.button(label, key=f"quick_question_{idx}", use_container_width=True):
                 quick_prompt = question
 
-    with st.form("chat_input_form", clear_on_submit=True):
-        user_prompt = st.text_area(
-            "输入问题",
-            label_visibility="collapsed",
-            placeholder="请输入您的问题，例如：最近用电情况怎么样？",
-            height=88,
-            key="chat_user_input",
-        )
-        send_clicked = st.form_submit_button("➤", help="发送")
+    user_prompt = st.chat_input(
+        "请输入您的问题，例如：最近用电情况怎么样？",
+        key="assistant_chat_input",
+    )
 
-    # 恢复原布局：将发送按钮放到输入框右下角
-    components.html("""
-    <script>
-    (function moveBtn() {
-        const doc = window.parent.document;
-        const form = doc.querySelector('div[data-testid="stForm"]');
-        if (!form) { setTimeout(moveBtn, 300); return; }
-        const btn = form.querySelector('div[data-testid="stFormSubmitButton"]');
-        const ta = form.querySelector('div[data-baseweb="textarea"]');
-        if (!btn || !ta) { setTimeout(moveBtn, 300); return; }
-
-        ta.style.position = 'relative';
-        btn.style.position = 'absolute';
-        btn.style.bottom = '10px';
-        btn.style.right = '10px';
-        btn.style.left = 'auto';
-        btn.style.width = 'auto';
-        btn.style.zIndex = '30';
-        btn.style.margin = '0';
-        btn.style.padding = '0';
-        ta.appendChild(btn);
-    })();
-    </script>
-    """, height=0)
-
-    prompt_to_send = quick_prompt or (user_prompt.strip() if send_clicked else "")
+    prompt_to_send = quick_prompt or (user_prompt.strip() if user_prompt else "")
 
     if prompt_to_send:
         prompt = prompt_to_send.strip()
