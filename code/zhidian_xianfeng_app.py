@@ -1580,19 +1580,30 @@ def apply_global_theme() -> None:
         }
         div[data-testid="stChatInput"] > div {
             position: relative !important;
-            min-height: 74px !important;
-            padding: 8px 54px 8px 12px !important;
+            min-height: 88px !important;
+            padding: 10px 58px 12px 14px !important;
             background: linear-gradient(180deg, rgba(14, 22, 38, 0.92), rgba(8, 15, 29, 0.96)) !important;
             border: 1px solid rgba(110, 168, 255, 0.16) !important;
             border-radius: 18px !important;
             box-shadow: inset 0 1px 0 rgba(255,255,255,0.03), 0 14px 34px rgba(1, 6, 18, 0.24) !important;
         }
+        div[data-testid="stChatInput"] div[data-baseweb="textarea"],
+        div[data-testid="stChatInput"] div[data-baseweb="textarea"] > div {
+            width: 100% !important;
+            background: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
+        }
         div[data-testid="stChatInput"] textarea {
+            width: 100% !important;
+            background: transparent !important;
+            border: none !important;
             color: var(--text-1) !important;
             font-size: 14px !important;
             line-height: 1.55 !important;
-            min-height: 54px !important;
-            padding: 8px 4px 8px 0 !important;
+            min-height: 60px !important;
+            padding: 6px 4px 18px 0 !important;
+            resize: none !important;
         }
         div[data-testid="stChatInput"] textarea::placeholder {
             color: #8394b8 !important;
@@ -1600,9 +1611,9 @@ def apply_global_theme() -> None:
         div[data-testid="stChatInput"] button {
             position: absolute !important;
             right: 10px !important;
-            top: 50% !important;
-            bottom: auto !important;
-            transform: translateY(-50%) !important;
+            bottom: 10px !important;
+            top: auto !important;
+            transform: none !important;
             width: 36px !important;
             min-width: 36px !important;
             height: 36px !important;
