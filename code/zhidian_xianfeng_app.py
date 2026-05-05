@@ -1782,13 +1782,13 @@ def section_title(title: str) -> None:
     )
 
 def meter_card(title: str, value: float, unit: str, color: str, compact: bool = False) -> None:
-    pad = "14px 14px" if compact else "20px 22px"
-    radius = "16px" if compact else "20px"
-    title_size = "12px" if compact else "14px"
-    value_size = "29px" if compact else "40px"
-    unit_size = "12px" if compact else "14px"
-    title_gap = "6px" if compact else "10px"
-    unit_gap = "4px" if compact else "8px"
+    pad = "9px 12px" if compact else "20px 22px"
+    radius = "14px" if compact else "20px"
+    title_size = "11px" if compact else "14px"
+    value_size = "24px" if compact else "40px"
+    unit_size = "10px" if compact else "14px"
+    title_gap = "4px" if compact else "10px"
+    unit_gap = "2px" if compact else "8px"
     st.markdown(
         f"""
         <div style="background:{color};padding:{pad};border-radius:{radius};color:white;box-shadow:0 10px 26px rgba(15,23,42,0.12);">
@@ -2236,7 +2236,7 @@ def render_total_card(summary_df: pd.DataFrame, compact: bool = False) -> None:
     with c2:
         meter_card("总电费", total_cost, "元（分时+阶梯）", "linear-gradient(135deg,#16a34a,#84cc16)", compact=compact)
 
-    row_gap = "4px" if compact else "6px"
+    row_gap = "0px" if compact else "6px"
     st.markdown(f"<div style='height:{row_gap}'></div>", unsafe_allow_html=True)
     c3, c4 = st.columns(2)
     with c3:
