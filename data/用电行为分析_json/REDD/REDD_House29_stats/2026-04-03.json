@@ -1,0 +1,331 @@
+{
+  "meta": {
+    "schema_version": "1.0",
+    "source": "daily_analysis_excel",
+    "generated_at": "2026-04-17 15:54:23"
+  },
+  "user": {
+    "dataset": "REDD",
+    "house_dir": "REDD_House6_stats",
+    "user_name": "用户6"
+  },
+  "date": "2026-04-03",
+  "pricing": {
+    "price_mode": "time_of_use_plus_tier",
+    "tier_level": 1,
+    "hourly_price_24h": [
+      0.22916875,
+      0.22916875,
+      0.22916875,
+      0.22916875,
+      0.22916875,
+      0.22916875,
+      0.22916875,
+      0.22916875,
+      0.58886875,
+      0.58886875,
+      0.99496875,
+      0.99496875,
+      0.58886875,
+      0.58886875,
+      0.99496875,
+      0.99496875,
+      0.99496875,
+      0.99496875,
+      0.99496875,
+      0.58886875,
+      0.58886875,
+      0.58886875,
+      0.58886875,
+      0.58886875
+    ],
+    "avg_price_per_kwh": 0.58741458,
+    "currency": "CNY"
+  },
+  "daily_summary": {
+    "total_energy_kwh": 5.047517,
+    "total_cost_cny": 1.784404,
+    "appliance_count": 8
+  },
+  "appliances": [
+    {
+      "appliance_code": "AC",
+      "appliance_name_cn": "空调",
+      "energy_kwh": 2.329376,
+      "switch_on_count": 2,
+      "interval_source": "result_M_pairing",
+      "on_off_periods": [
+        {
+          "start_minute": 30,
+          "end_minute": 75,
+          "start": "00:30",
+          "end": "01:15",
+          "duration_min": 45.0,
+          "avg_power_w": 1287.131
+        },
+        {
+          "start_minute": 90,
+          "end_minute": 165,
+          "start": "01:30",
+          "end": "02:45",
+          "duration_min": 75.0,
+          "avg_power_w": 1091.223
+        }
+      ]
+    },
+    {
+      "appliance_code": "FG",
+      "appliance_name_cn": "冰箱",
+      "energy_kwh": 2.07259,
+      "switch_on_count": 17,
+      "interval_source": "result_M_pairing",
+      "on_off_periods": [
+        {
+          "start_minute": 1,
+          "end_minute": 15,
+          "start": "00:01",
+          "end": "00:15",
+          "duration_min": 14.0,
+          "avg_power_w": 150.381
+        },
+        {
+          "start_minute": 45,
+          "end_minute": 194,
+          "start": "00:45",
+          "end": "03:14",
+          "duration_min": 149.0,
+          "avg_power_w": 147.098
+        },
+        {
+          "start_minute": 210,
+          "end_minute": 270,
+          "start": "03:30",
+          "end": "04:30",
+          "duration_min": 60.0,
+          "avg_power_w": 111.511
+        },
+        {
+          "start_minute": 300,
+          "end_minute": 345,
+          "start": "05:00",
+          "end": "05:45",
+          "duration_min": 45.0,
+          "avg_power_w": 132.285
+        },
+        {
+          "start_minute": 375,
+          "end_minute": 420,
+          "start": "06:15",
+          "end": "07:00",
+          "duration_min": 45.0,
+          "avg_power_w": 125.192
+        },
+        {
+          "start_minute": 450,
+          "end_minute": 495,
+          "start": "07:30",
+          "end": "08:15",
+          "duration_min": 45.0,
+          "avg_power_w": 121.211
+        },
+        {
+          "start_minute": 525,
+          "end_minute": 570,
+          "start": "08:45",
+          "end": "09:30",
+          "duration_min": 45.0,
+          "avg_power_w": 115.457
+        },
+        {
+          "start_minute": 600,
+          "end_minute": 645,
+          "start": "10:00",
+          "end": "10:45",
+          "duration_min": 45.0,
+          "avg_power_w": 131.926
+        },
+        {
+          "start_minute": 675,
+          "end_minute": 795,
+          "start": "11:15",
+          "end": "13:15",
+          "duration_min": 120.0,
+          "avg_power_w": 168.334
+        },
+        {
+          "start_minute": 810,
+          "end_minute": 855,
+          "start": "13:30",
+          "end": "14:15",
+          "duration_min": 45.0,
+          "avg_power_w": 111.557
+        },
+        {
+          "start_minute": 885,
+          "end_minute": 930,
+          "start": "14:45",
+          "end": "15:30",
+          "duration_min": 45.0,
+          "avg_power_w": 113.763
+        },
+        {
+          "start_minute": 960,
+          "end_minute": 1005,
+          "start": "16:00",
+          "end": "16:45",
+          "duration_min": 45.0,
+          "avg_power_w": 112.515
+        },
+        {
+          "start_minute": 1035,
+          "end_minute": 1080,
+          "start": "17:15",
+          "end": "18:00",
+          "duration_min": 45.0,
+          "avg_power_w": 113.043
+        },
+        {
+          "start_minute": 1110,
+          "end_minute": 1155,
+          "start": "18:30",
+          "end": "19:15",
+          "duration_min": 45.0,
+          "avg_power_w": 117.149
+        },
+        {
+          "start_minute": 1185,
+          "end_minute": 1230,
+          "start": "19:45",
+          "end": "20:30",
+          "duration_min": 45.0,
+          "avg_power_w": 118.251
+        },
+        {
+          "start_minute": 1260,
+          "end_minute": 1305,
+          "start": "21:00",
+          "end": "21:45",
+          "duration_min": 45.0,
+          "avg_power_w": 114.348
+        },
+        {
+          "start_minute": 1320,
+          "end_minute": 1380,
+          "start": "22:00",
+          "end": "23:00",
+          "duration_min": 60.0,
+          "avg_power_w": 154.004
+        }
+      ]
+    },
+    {
+      "appliance_code": "UNK_其他电器",
+      "appliance_name_cn": "其他电器",
+      "energy_kwh": 0.434766,
+      "switch_on_count": 0,
+      "interval_source": "event_positive_fallback",
+      "on_off_periods": []
+    },
+    {
+      "appliance_code": "EH",
+      "appliance_name_cn": "电暖器",
+      "energy_kwh": 0.177501,
+      "switch_on_count": 1,
+      "interval_source": "result_M_pairing",
+      "on_off_periods": [
+        {
+          "start_minute": 0,
+          "end_minute": 150,
+          "start": "00:00",
+          "end": "02:30",
+          "duration_min": 150.0,
+          "avg_power_w": 71.0
+        }
+      ]
+    },
+    {
+      "appliance_code": "DY",
+      "appliance_name_cn": "烘干机",
+      "energy_kwh": 0.033283,
+      "switch_on_count": 1,
+      "interval_source": "result_M_pairing",
+      "on_off_periods": [
+        {
+          "start_minute": 1319,
+          "end_minute": 1335,
+          "start": "21:59",
+          "end": "22:15",
+          "duration_min": 16.0,
+          "avg_power_w": 124.813
+        }
+      ]
+    },
+    {
+      "appliance_code": "KO",
+      "appliance_name_cn": "厨房插座",
+      "energy_kwh": 0.0,
+      "switch_on_count": 1,
+      "interval_source": "result_M_pairing",
+      "on_off_periods": [
+        {
+          "start_minute": 1395,
+          "end_minute": 1425,
+          "start": "23:15",
+          "end": "23:45",
+          "duration_min": 30.0,
+          "avg_power_w": 45.316
+        }
+      ]
+    },
+    {
+      "appliance_code": "LT",
+      "appliance_name_cn": "照明",
+      "energy_kwh": 0.0,
+      "switch_on_count": 1,
+      "interval_source": "event_positive_fallback",
+      "on_off_periods": [
+        {
+          "start_minute": 2,
+          "end_minute": 3,
+          "start": "00:02",
+          "end": "00:03",
+          "duration_min": 1.0,
+          "avg_power_w": null
+        }
+      ]
+    },
+    {
+      "appliance_code": "OU",
+      "appliance_name_cn": "未知设备",
+      "energy_kwh": 0.0,
+      "switch_on_count": 2,
+      "interval_source": "result_M_pairing",
+      "on_off_periods": [
+        {
+          "start_minute": 3,
+          "end_minute": 195,
+          "start": "00:03",
+          "end": "03:15",
+          "duration_min": 192.0,
+          "avg_power_w": 112.26
+        },
+        {
+          "start_minute": 585,
+          "end_minute": 615,
+          "start": "09:45",
+          "end": "10:15",
+          "duration_min": 30.0,
+          "avg_power_w": 105.75
+        }
+      ]
+    }
+  ],
+  "gpt_ready_hint": {
+    "task": "请基于该用户当日电器开启时段与各电器电量，分析用电习惯并给出可执行节能建议。",
+    "focus": [
+      "是否存在高峰时段电器扎堆运行",
+      "高能耗电器的开启频次和持续时间是否异常",
+      "可否通过错峰、缩短时长、参数优化降低能耗"
+    ]
+  }
+}
