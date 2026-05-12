@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import argparse
+import json
+import re
 import shutil
 from pathlib import Path
 
@@ -8,6 +10,7 @@ from pathlib import Path
 COPY_COUNT = 28
 SOURCE_HOUSE_ID = 6
 FIRST_TARGET_HOUSE_ID = 7
+KG_FILE_RE = re.compile(r"^REDD_House(\d+)_stats\.json$")
 
 
 def project_root() -> Path:
@@ -62,6 +65,26 @@ def copy_one(source: Path, target: Path, overwrite: bool, dry_run: bool) -> None
         shutil.copytree(source, target)
     else:
         shutil.copy2(source, target)
+        update_kg_user_name(target)
+
+
+def update_kg_user_name(path: Path) -> None:
+    house_match = KG_FILE_RE.match(path.name)
+    if not house_match:
+        return
+
+    with path.open("r", encoding="utf-8") as file_obj:
+        payload = json.load(file_obj)
+
+    user = payload.get("user")
+    if not isinstance(user, dict):
+        return
+
+    user["name"] = f"用户{house_match.group(1)}"
+
+    with path.open("w", encoding="utf-8") as file_obj:
+        json.dump(payload, file_obj, ensure_ascii=False, indent=2)
+        file_obj.write("\n")
 
 
 def main() -> None:
