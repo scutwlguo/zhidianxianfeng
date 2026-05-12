@@ -162,9 +162,9 @@ def main() -> None:
         )
     )
     parser.add_argument(
-        "--apply",
+        "--dry-run",
         action="store_true",
-        help="Actually create missing files. Without this flag, only prints a dry run.",
+        help="Only print what would be created without writing files.",
     )
     parser.add_argument(
         "--overwrite",
@@ -174,7 +174,7 @@ def main() -> None:
     args = parser.parse_args()
 
     jobs = build_jobs(project_root())
-    dry_run = not args.apply
+    dry_run = args.dry_run
 
     for job in jobs:
         run_job(job, dry_run=dry_run, overwrite=args.overwrite)
